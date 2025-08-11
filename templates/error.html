@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Error - Rescue{% endblock %}
+{% block content %}
+<section class="content-section">
+    <h2 class="section-title">Error</h2>
+    <p class="section-subtitle">{{ error }}</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('main.index') }}" class="btn-primary">Return Home</a>
+    </div>
+</section>
+{% endblock %}

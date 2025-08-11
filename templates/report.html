@@ -1,0 +1,1197 @@
+{% extends "base.html" %}
+{% block title %}Report Missing Person - Advanced Missing Person Finder{% endblock %}
+{% block head_extra %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+
+<!-- Premium Report Hero Section -->
+<section class="premium-report-hero" id="report-hero">
+    <!-- Premium Background Elements -->
+    <div class="report-floating-elements">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <!-- Report Hero Content -->
+    <div class="report-hero-content">
+        <!-- Premium Badge -->
+        <div class="report-badge" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge-icon">📋</span>
+            <span>Missing Person Report</span>
+        </div>
+
+        <h1 data-aos="fade-up" data-aos-duration="1200">
+            <span class="report-title-line">Help Us Find</span>
+            <span class="report-title-line report-title-accent">Someone Missing</span>
+        </h1>
+
+        <p data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+            Every detail matters. Your report could be the key to bringing someone home safely.
+            Please provide as much information as possible to help our search efforts.
+        </p>
+
+        <!-- Premium Statistics -->
+        <div class="report-stats" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+            <div class="stat-item">
+                <div class="stat-number">98.7%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24h</div>
+                <div class="stat-label">Avg Response</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Support</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Report Form Section -->
+<section class="premium-report-form-section" id="report-form">
+    <div class="form-container">
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages" data-aos="fade-down">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <div class="flash-content">
+                                <span class="flash-icon">
+                                    {% if category == 'success' %}✅
+                                    {% elif category == 'error' %}❌
+                                    {% elif category == 'warning' %}⚠️
+                                    {% else %}ℹ️{% endif %}
+                                </span>
+                                <span class="flash-text">{{ message }}</span>
+                                <button class="flash-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <!-- Form Header -->
+        <div class="form-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">✍️</span>
+                <span class="badge-text">Report Details</span>
+            </div>
+            <h2 class="form-title">
+                Submit Missing Person
+                <span class="gradient-text">Information</span>
+            </h2>
+            <p class="form-subtitle">
+                Please fill out all required fields with accurate information. This will help authorities and volunteers in their search efforts.
+            </p>
+        </div>
+
+        <!-- Premium Progress Indicator -->
+        <div class="form-progress" data-aos="fade-up" data-aos-delay="200">
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">
+                    <div class="step-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-title">Personal Info</span>
+                        <span class="step-subtitle">Basic details</span>
+                    </div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-title">Location</span>
+                        <span class="step-subtitle">Last seen</span>
+                    </div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="step-content">
+                        <span class="step-title">Description</span>
+                        <span class="step-subtitle">Details & photo</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Premium Form -->
+        <form method="POST" action="{{ url_for('main.report') }}" enctype="multipart/form-data" class="premium-report-form" data-aos="fade-up" data-aos-delay="300" id="reportForm">
+            {{ form.hidden_tag() }}
+
+            <!-- Debug info -->
+            <div id="debugInfo" style="display: none; background: #f0f0f0; padding: 1rem; margin-bottom: 1rem; border-radius: 4px;">
+                <h4>Debug Information</h4>
+                <p>Current Step: <span id="currentStepDebug">1</span></p>
+                <p>Form Action: {{ url_for('main.report') }}</p>
+                <p>Form Method: POST</p>
+                <button type="button" onclick="toggleDebug()">Toggle Debug</button>
+            </div>
+
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" data-step="1">
+                <div class="step-header">
+                    <h3>Personal Information</h3>
+                    <p>Basic details about the missing person</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group premium-input">
+                        <label for="name" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Full Name *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.name(class="form-control premium-control", placeholder="Enter the missing person's full name", required=true) }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Include first, middle, and last name if known
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group premium-input">
+                        <label for="age" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Age *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.age(class="form-control premium-control", placeholder="Age in years", min="0", max="120", required=true) }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Approximate age if exact age is unknown
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group premium-input full-width">
+                        <label for="gender" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                            </svg>
+                            Gender *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.gender(class="form-control premium-control premium-select", required=true) }}
+                            <div class="select-arrow">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Select the most appropriate option
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn-next premium-btn" onclick="nextStep(); return false;" id="step1-next">
+                        <span>Continue</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Location Information -->
+            <div class="form-step" data-step="2">
+                <div class="step-header">
+                    <h3>Location Information</h3>
+                    <p>Where was the person last seen?</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group premium-input full-width">
+                        <label for="area" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Last Known Location *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.area(class="form-control premium-control", placeholder="Enter the last known location (city, area, landmark)", required=true) }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Be as specific as possible - include street names, landmarks, or nearby areas
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group premium-input">
+                        <label for="last_seen_date" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Last Seen Date
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.last_seen_date(class="form-control premium-control", max=today) }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            When was the person last seen? (Optional if unknown)
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group premium-input">
+                        <label for="last_seen_time" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Approximate Time
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.last_seen_time(class="form-control premium-control") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Approximate time if known
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn-prev premium-btn secondary" onclick="prevStep(); return false;" id="step2-prev">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="17" y1="7" x2="7" y2="17"></line>
+                            <polyline points="17 17 7 17 7 7"></polyline>
+                        </svg>
+                        <span>Previous</span>
+                    </button>
+                    <button type="button" class="btn-next premium-btn" onclick="nextStep(); return false;" id="step2-next">
+                        <span>Continue</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Description and Photo -->
+            <div class="form-step" data-step="3">
+                <div class="step-header">
+                    <h3>Description & Photo</h3>
+                    <p>Provide detailed description and upload a recent photo</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group premium-input full-width">
+                        <label for="description" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            Detailed Description *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.description(class="form-control premium-control premium-textarea", placeholder="Provide a detailed description including physical features, clothing, distinguishing marks, etc.", rows="6", required=true) }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <div class="char-counter">
+                            <span id="desc-count">0</span> / 1000 characters
+                            <div class="counter-bar">
+                                <div class="counter-fill" id="counterFill"></div>
+                            </div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Include: height, weight, hair color, eye color, clothing, distinguishing features, medical conditions, etc.
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+
+                    <div class="form-group premium-input full-width">
+                        <label for="image" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            Recent Photo
+                        </label>
+                        <div class="premium-file-upload">
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <div class="upload-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                        <polyline points="21 15 16 10 5 21"></polyline>
+                                    </svg>
+                                </div>
+                                <div class="upload-content">
+                                    <h4>Drop your photo here or click to browse</h4>
+                                    <p>Supports: JPG, PNG, WEBP (Max: 10MB)</p>
+                                </div>
+                                {{ form.image(class="file-input", id="image-upload", accept="image/*") }}
+                            </div>
+                            <div class="file-preview" id="filePreview" style="display: none;">
+                                <div class="preview-image">
+                                    <img id="previewImg" src="" alt="Preview">
+                                    <button type="button" class="remove-file" onclick="removeFile()">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="file-info">
+                                    <div class="file-name" id="fileName"></div>
+                                    <div class="file-size" id="fileSize"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Upload the most recent clear photo available. This greatly helps in identification.
+                        </small>
+                        <div class="validation-message"></div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn-prev premium-btn secondary" onclick="prevStep(); return false;" id="step3-prev">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="17" y1="7" x2="7" y2="17"></line>
+                            <polyline points="17 17 7 17 7 7"></polyline>
+                        </svg>
+                        <span>Previous</span>
+                    </button>
+                    <button type="submit" class="btn-submit premium-btn primary" id="submitBtn">
+                        <span class="submit-text">Submit Report</span>
+                        <span class="submit-loading" style="display: none;">
+                            <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                            </svg>
+                            Submitting...
+                        </span>
+                        <svg class="submit-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+
+                    <!-- Debug submit button for testing -->
+                    <button type="button" class="btn-submit premium-btn secondary" style="margin-left: 1rem;" onclick="debugSubmit()">
+                        🔍 Debug Submit
+                    </button>
+
+                    <!-- Direct submit button that bypasses all JavaScript -->
+                    <button type="button" class="btn-submit premium-btn" style="margin-left: 1rem; background: #28a745;" onclick="directSubmit()">
+                        🚀 Direct Submit
+                    </button>
+
+                    <!-- Show all steps button for debugging -->
+                    <button type="button" class="btn-submit premium-btn" style="margin-left: 1rem; background: #17a2b8;" onclick="showAllSteps()">
+                        📋 Show All Steps
+                    </button>
+
+                    <!-- Fallback submit button (hidden by default, shown if JS fails) -->
+                    <noscript>
+                        <button type="submit" class="btn-submit premium-btn primary" style="margin-left: 1rem;">
+                            Submit Report (No JS)
+                        </button>
+                    </noscript>
+                </div>
+            </div>
+        </form>
+
+        <!-- Emergency Contact Information -->
+        <div class="emergency-contact" data-aos="fade-up" data-aos-delay="400">
+            <div class="contact-header">
+                <div class="contact-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="contact-content">
+                    <h3>Need Immediate Help?</h3>
+                    <p>If this is an emergency or you have immediate safety concerns, contact authorities directly.</p>
+                </div>
+            </div>
+            <div class="contact-actions">
+                <a href="tel:15" class="contact-btn emergency">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Emergency: 15
+                </a>
+                <a href="tel:1122" class="contact-btn police">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Police: 1122
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100
+    });
+
+    // Premium Form Manager
+    class PremiumReportForm {
+        constructor() {
+            this.currentStep = 1;
+            this.totalSteps = 3;
+            this.form = document.querySelector('.premium-report-form');
+            this.progressFill = document.getElementById('progressFill');
+            this.descriptionField = document.querySelector('textarea[name="description"]');
+            this.charCounter = document.getElementById('desc-count');
+            this.counterFill = document.getElementById('counterFill');
+            this.fileInput = document.getElementById('image-upload');
+            this.fileUploadArea = document.getElementById('fileUploadArea');
+            this.filePreview = document.getElementById('filePreview');
+
+            // Debug: Check if all elements are found
+            console.log('Form elements found:', {
+                form: !!this.form,
+                progressFill: !!this.progressFill,
+                descriptionField: !!this.descriptionField,
+                charCounter: !!this.charCounter,
+                counterFill: !!this.counterFill,
+                fileInput: !!this.fileInput,
+                fileUploadArea: !!this.fileUploadArea,
+                filePreview: !!this.filePreview
+            });
+
+            // Check form steps
+            const steps = document.querySelectorAll('.form-step');
+            console.log(`Found ${steps.length} form steps`);
+
+            this.initializeEventListeners();
+            this.updateProgress();
+            this.updateStepDisplay(); // Ensure first step is shown
+        }
+
+        initializeEventListeners() {
+            // Character counter for description
+            if (this.descriptionField && this.charCounter) {
+                this.descriptionField.addEventListener('input', () => this.updateCharCounter());
+            }
+
+            // File upload functionality
+            if (this.fileInput && this.fileUploadArea) {
+                this.initializeFileUpload();
+            }
+
+            // Form validation
+            this.initializeValidation();
+
+            // Form submission - allow submission from any step for debugging
+            if (this.form) {
+                this.form.addEventListener('submit', (e) => {
+                    console.log('Form submit event triggered');
+                    console.log(`Current step: ${this.currentStep}, Total steps: ${this.totalSteps}`);
+
+                    // For now, allow submission from any step to debug the issue
+                    // TODO: Re-enable step validation once form submission works
+
+                    // Show loading state
+                    console.log('Allowing form submission');
+                    this.showLoadingState();
+
+                    // Let the form submit normally - don't prevent default
+                });
+            }
+        }
+
+        updateCharCounter() {
+            const length = this.descriptionField.value.length;
+            const maxLength = 1000;
+            const percentage = (length / maxLength) * 100;
+
+            this.charCounter.textContent = length;
+            this.counterFill.style.width = `${Math.min(percentage, 100)}%`;
+
+            // Change color based on usage
+            if (percentage > 90) {
+                this.counterFill.style.background = 'var(--error-color)';
+            } else if (percentage > 70) {
+                this.counterFill.style.background = 'var(--warning-color)';
+            } else {
+                this.counterFill.style.background = 'var(--primary-color)';
+            }
+        }
+
+        initializeFileUpload() {
+            // Drag and drop functionality
+            this.fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                this.fileUploadArea.classList.add('drag-over');
+            });
+
+            this.fileUploadArea.addEventListener('dragleave', () => {
+                this.fileUploadArea.classList.remove('drag-over');
+            });
+
+            this.fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                this.fileUploadArea.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.handleFileSelect(files[0]);
+                }
+            });
+
+            // Click to upload
+            this.fileUploadArea.addEventListener('click', () => {
+                this.fileInput.click();
+            });
+
+            // File input change
+            this.fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    this.handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        handleFileSelect(file) {
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                this.showNotification('Please select a valid image file (JPG, PNG, WEBP)', 'error');
+                return;
+            }
+
+            // Validate file size (10MB)
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                this.showNotification('File size must be less than 10MB', 'error');
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = this.formatFileSize(file.size);
+
+                this.fileUploadArea.style.display = 'none';
+                this.filePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        initializeValidation() {
+            const inputs = this.form.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => this.validateField(input));
+                input.addEventListener('input', () => this.clearValidation(input));
+            });
+        }
+
+        validateField(field) {
+            const value = field.value.trim();
+            const isRequired = field.hasAttribute('required');
+            const wrapper = field.closest('.form-group');
+            const validationMessage = wrapper.querySelector('.validation-message');
+
+            if (isRequired && !value) {
+                this.showFieldError(wrapper, validationMessage, 'This field is required');
+                return false;
+            }
+
+            // Specific validations
+            if (field.type === 'number' && value) {
+                const num = parseInt(value);
+                if (isNaN(num) || num < 0 || num > 120) {
+                    this.showFieldError(wrapper, validationMessage, 'Please enter a valid age (0-120)');
+                    return false;
+                }
+            }
+
+            if (field.name === 'description' && value) {
+                if (value.length < 10) {
+                    this.showFieldError(wrapper, validationMessage, 'Description must be at least 10 characters');
+                    return false;
+                }
+            }
+
+            this.showFieldSuccess(wrapper, validationMessage);
+            return true;
+        }
+
+        showFieldError(wrapper, messageEl, message) {
+            wrapper.classList.add('has-error');
+            wrapper.classList.remove('has-success');
+            messageEl.textContent = message;
+            messageEl.style.color = 'var(--error-color)';
+        }
+
+        showFieldSuccess(wrapper, messageEl) {
+            wrapper.classList.add('has-success');
+            wrapper.classList.remove('has-error');
+            messageEl.textContent = '';
+        }
+
+        clearValidation(field) {
+            const wrapper = field.closest('.form-group');
+            wrapper.classList.remove('has-error', 'has-success');
+            const validationMessage = wrapper.querySelector('.validation-message');
+            validationMessage.textContent = '';
+        }
+
+        nextStep() {
+            console.log(`Attempting to go to next step from ${this.currentStep}`);
+
+            if (this.validateCurrentStep()) {
+                if (this.currentStep < this.totalSteps) {
+                    this.currentStep++;
+                    console.log(`Moving to step ${this.currentStep}`);
+                    this.updateStepDisplay();
+                    this.updateProgress();
+
+                    // If we're now on the final step, ensure all form fields are visible
+                    if (this.currentStep === this.totalSteps) {
+                        this.prepareForSubmission();
+                    }
+                } else {
+                    console.log('Already at last step');
+                }
+            } else {
+                console.log('Current step validation failed');
+            }
+        }
+
+        prevStep() {
+            console.log(`Attempting to go to previous step from ${this.currentStep}`);
+
+            if (this.currentStep > 1) {
+                this.currentStep--;
+                console.log(`Moving to step ${this.currentStep}`);
+                this.updateStepDisplay();
+                this.updateProgress();
+            } else {
+                console.log('Already at first step');
+            }
+        }
+
+        validateCurrentStep() {
+            const currentStepEl = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
+            if (!currentStepEl) {
+                console.error(`Step ${this.currentStep} not found`);
+                return false;
+            }
+
+            const inputs = currentStepEl.querySelectorAll('input[required], textarea[required], select[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!this.validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                this.showNotification('Please fill in all required fields correctly.', 'error');
+            }
+
+            return isValid;
+        }
+
+        updateStepDisplay() {
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            const currentStepEl = document.querySelector(`.form-step[data-step="${this.currentStep}"]`);
+            if (currentStepEl) {
+                currentStepEl.classList.add('active');
+            } else {
+                console.error(`Step ${this.currentStep} element not found`);
+            }
+
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                if (index + 1 <= this.currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // Update debug info
+            const debugStep = document.getElementById('currentStepDebug');
+            if (debugStep) {
+                debugStep.textContent = this.currentStep;
+            }
+
+            // Scroll to top of form
+            const formSection = document.getElementById('report-form');
+            if (formSection) {
+                formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        updateProgress() {
+            const percentage = (this.currentStep / this.totalSteps) * 100;
+            this.progressFill.style.width = `${percentage}%`;
+        }
+
+        showLoadingState() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                const submitText = submitBtn.querySelector('.submit-text');
+                const submitLoading = submitBtn.querySelector('.submit-loading');
+                const submitIcon = submitBtn.querySelector('.submit-icon');
+
+                if (submitText && submitLoading && submitIcon) {
+                    submitBtn.disabled = true;
+                    submitText.style.display = 'none';
+                    submitIcon.style.display = 'none';
+                    submitLoading.style.display = 'flex';
+                }
+            }
+        }
+
+        prepareForSubmission() {
+            console.log('Preparing form for submission');
+
+            // Ensure all form fields from previous steps are accessible to the form
+            // This is important because hidden steps might not submit their data
+            const allSteps = document.querySelectorAll('.form-step');
+            allSteps.forEach(step => {
+                const inputs = step.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    // Ensure the input is not disabled and has a name
+                    if (input.name && input.value !== undefined) {
+                        input.disabled = false;
+                        console.log(`Enabled field: ${input.name} = ${input.value}`);
+                    }
+                });
+            });
+
+            console.log('Form preparation complete');
+        }
+
+
+
+        showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">
+                        ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+                    </span>
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+    }
+
+    // Initialize form manager when DOM is loaded
+    let formManager;
+
+    // Global functions for button clicks
+    function nextStep() {
+        if (formManager) {
+            formManager.nextStep();
+        } else {
+            console.error('Form manager not initialized, using fallback');
+            // Fallback navigation
+            fallbackNextStep();
+        }
+    }
+
+    function prevStep() {
+        if (formManager) {
+            formManager.prevStep();
+        } else {
+            console.error('Form manager not initialized, using fallback');
+            // Fallback navigation
+            fallbackPrevStep();
+        }
+    }
+
+    // Fallback navigation functions
+    function fallbackNextStep() {
+        const currentStep = document.querySelector('.form-step.active');
+        if (!currentStep) return;
+
+        const currentStepNum = parseInt(currentStep.getAttribute('data-step'));
+        const nextStepNum = currentStepNum + 1;
+
+        if (nextStepNum <= 3) {
+            // Hide current step
+            currentStep.classList.remove('active');
+
+            // Show next step
+            const nextStep = document.querySelector(`.form-step[data-step="${nextStepNum}"]`);
+            if (nextStep) {
+                nextStep.classList.add('active');
+
+                // Update progress
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    const percentage = (nextStepNum / 3) * 100;
+                    progressFill.style.width = `${percentage}%`;
+                }
+
+                // Update progress steps
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    if (index + 1 <= nextStepNum) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+            }
+        }
+    }
+
+    function fallbackPrevStep() {
+        const currentStep = document.querySelector('.form-step.active');
+        if (!currentStep) return;
+
+        const currentStepNum = parseInt(currentStep.getAttribute('data-step'));
+        const prevStepNum = currentStepNum - 1;
+
+        if (prevStepNum >= 1) {
+            // Hide current step
+            currentStep.classList.remove('active');
+
+            // Show previous step
+            const prevStep = document.querySelector(`.form-step[data-step="${prevStepNum}"]`);
+            if (prevStep) {
+                prevStep.classList.add('active');
+
+                // Update progress
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    const percentage = (prevStepNum / 3) * 100;
+                    progressFill.style.width = `${percentage}%`;
+                }
+
+                // Update progress steps
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    if (index + 1 <= prevStepNum) {
+                        step.classList.add('active');
+                    } else {
+                        step.classList.remove('active');
+                    }
+                });
+            }
+        }
+    }
+
+    function removeFile() {
+        const fileInput = document.getElementById('image-upload');
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const filePreview = document.getElementById('filePreview');
+
+        if (fileInput && fileUploadArea && filePreview) {
+            fileInput.value = '';
+            fileUploadArea.style.display = 'block';
+            filePreview.style.display = 'none';
+        }
+    }
+
+    function debugSubmit() {
+        console.log('Debug submit clicked');
+
+        const form = document.querySelector('.premium-report-form');
+        if (!form) {
+            console.error('Form not found');
+            alert('Form not found!');
+            return;
+        }
+
+        console.log('Form found:', form);
+        console.log('Form action:', form.action);
+        console.log('Form method:', form.method);
+
+        // Show all steps to make all fields accessible
+        document.querySelectorAll('.form-step').forEach((step, index) => {
+            step.style.display = 'block';
+            console.log(`Step ${index + 1} made visible`);
+        });
+
+        // Enable all form fields and log their values
+        const inputs = form.querySelectorAll('input, select, textarea');
+        console.log(`Found ${inputs.length} form fields`);
+
+        const formData = new FormData(form);
+        console.log('Current form data:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`  ${key}: ${value}`);
+        }
+
+        // Check if required fields are filled
+        const requiredFields = ['name', 'age', 'gender', 'area', 'description'];
+        const missingFields = [];
+
+        requiredFields.forEach(field => {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (!input || !input.value.trim()) {
+                missingFields.push(field);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            alert(`Missing required fields: ${missingFields.join(', ')}`);
+            return;
+        }
+
+        // Submit the form directly
+        console.log('All required fields filled, submitting form directly');
+        form.submit();
+    }
+
+    function toggleDebug() {
+        const debugInfo = document.getElementById('debugInfo');
+        if (debugInfo) {
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    function directSubmit() {
+        console.log('Direct submit clicked - bypassing all JavaScript');
+
+        // Get the form
+        const form = document.querySelector('.premium-report-form');
+        if (!form) {
+            alert('Form not found!');
+            return;
+        }
+
+        console.log('Form found:', form);
+        console.log('Form action:', form.action);
+        console.log('Form method:', form.method);
+
+        // Make all steps visible so all fields are accessible
+        document.querySelectorAll('.form-step').forEach((step, index) => {
+            step.style.display = 'block';
+            console.log(`Step ${index + 1} made visible`);
+        });
+
+        // Enable all fields
+        const allInputs = form.querySelectorAll('input, select, textarea');
+        allInputs.forEach(input => {
+            input.disabled = false;
+        });
+
+        // Check required fields
+        const requiredFields = ['name', 'age', 'gender', 'area', 'description'];
+        const missingFields = [];
+        const formData = new FormData(form);
+
+        console.log('Current form data:');
+        for (let [key, value] of formData.entries()) {
+            console.log(`  ${key}: ${value}`);
+        }
+
+        requiredFields.forEach(field => {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (!input || !input.value.trim()) {
+                missingFields.push(field);
+                console.log(`Missing field: ${field}`);
+            } else {
+                console.log(`Field OK: ${field} = ${input.value}`);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            alert(`Please fill in these required fields: ${missingFields.join(', ')}`);
+            return;
+        }
+
+        // Force the form action and method
+        form.action = '/report';
+        form.method = 'POST';
+
+        console.log('Form configured for direct submission:');
+        console.log('  Action:', form.action);
+        console.log('  Method:', form.method);
+        console.log('  Enctype:', form.enctype);
+
+        // Create a new submit button to avoid any event listeners
+        const submitButton = document.createElement('input');
+        submitButton.type = 'submit';
+        submitButton.style.display = 'none';
+        form.appendChild(submitButton);
+
+        // Submit directly
+        console.log('Submitting form with no JavaScript interference');
+        submitButton.click();
+    }
+
+    function showAllSteps() {
+        console.log('Showing all steps for easy form filling');
+
+        // Make all steps visible
+        document.querySelectorAll('.form-step').forEach((step, index) => {
+            step.style.display = 'block';
+            step.classList.add('active');
+            console.log(`Step ${index + 1} made visible and active`);
+        });
+
+        // Enable all form fields
+        const form = document.querySelector('.premium-report-form');
+        if (form) {
+            const allInputs = form.querySelectorAll('input, select, textarea');
+            allInputs.forEach(input => {
+                input.disabled = false;
+            });
+            console.log(`Enabled ${allInputs.length} form fields`);
+        }
+
+        alert('All form steps are now visible. You can fill out the entire form and then use Direct Submit.');
+    }
+
+    // Initialize form manager when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            formManager = new PremiumReportForm();
+            console.log('Form manager initialized successfully');
+
+            // Test button functionality
+            const nextBtn = document.getElementById('step1-next');
+            if (nextBtn) {
+                console.log('Next button found and ready');
+            } else {
+                console.error('Next button not found');
+            }
+
+        } catch (error) {
+            console.error('Failed to initialize form manager:', error);
+            console.log('Using fallback navigation only');
+        }
+    });
+
+    // Also try to initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+        // DOM is still loading
+    } else {
+        // DOM is already loaded
+        setTimeout(() => {
+            if (!formManager) {
+                try {
+                    formManager = new PremiumReportForm();
+                    console.log('Form manager initialized on immediate load');
+                } catch (error) {
+                    console.error('Immediate initialization failed:', error);
+                }
+            }
+        }, 100);
+    }
+</script>
+
+{% endblock %}

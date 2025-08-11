@@ -1,0 +1,1364 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Rescue{% endblock %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<section class="profile-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="profile-avatar-section">
+                {% if current_user.avatar_url %}
+                <div class="premium-avatar">
+                    <img src="{{ current_user.avatar_url }}" alt="User Avatar" class="avatar-image">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-status online"></div>
+                </div>
+                {% else %}
+                <div class="premium-avatar">
+                    <div class="default-avatar">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-status online"></div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <div class="profile-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Verified Member</span>
+                </div>
+                <h1 class="profile-name">{{ current_user.username }}</h1>
+                <p class="profile-email">{{ current_user.email }}</p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">{{ current_user.reports|length }}</span>
+                        <span class="stat-label">Reports</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ current_user.created_at.strftime('%Y') if current_user.created_at else '2024' }}</span>
+                        <span class="stat-label">Member Since</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">{{ ((current_user.last_seen - current_user.created_at).days if current_user.last_seen and current_user.created_at else 0) }}</span>
+                        <span class="stat-label">Days Active</span>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <a href="{{ url_for('main.edit_profile') }}" class="premium-btn primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Edit Profile
+                    </a>
+                    <button class="premium-btn secondary" onclick="shareProfile()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                            <polyline points="16 6 12 2 8 6"/>
+                            <line x1="12" y1="2" x2="12" y2="15"/>
+                        </svg>
+                        Share Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Profile Content -->
+<section class="profile-content-section">
+    <div class="container">
+        <!-- Account Information Section -->
+        <div class="premium-section" data-aos="fade-up" data-aos-delay="200">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="section-title-group">
+                    <h2 class="section-title">Account Information</h2>
+                    <p class="section-subtitle">Your account details and activity summary</p>
+                </div>
+            </div>
+
+            <div class="premium-info-grid">
+                <div class="premium-info-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Member Since</span>
+                        <span class="info-value">{{ current_user.created_at.strftime('%B %d, %Y') if current_user.created_at else 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="premium-info-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Last Active</span>
+                        <span class="info-value">{{ current_user.last_seen.strftime('%B %d, %Y at %H:%M') if current_user.last_seen else 'N/A' }}</span>
+                    </div>
+                </div>
+
+                <div class="premium-info-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Reports Submitted</span>
+                        <span class="info-value">{{ current_user.reports|length }}</span>
+                    </div>
+                </div>
+
+                <div class="premium-info-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="info-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <div class="info-content">
+                        <span class="info-label">Account Status</span>
+                        <span class="info-value status-verified">Verified</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Connections Section -->
+        {% if current_user.twitter or current_user.facebook or current_user.linkedin %}
+        <div class="premium-section" data-aos="fade-up" data-aos-delay="300">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                </div>
+                <div class="section-title-group">
+                    <h2 class="section-title">Social Connections</h2>
+                    <p class="section-subtitle">Your connected social media profiles</p>
+                </div>
+            </div>
+
+            <div class="premium-social-grid">
+                {% if current_user.twitter %}
+                <a href="https://twitter.com/{{ current_user.twitter }}" class="premium-social-card twitter" target="_blank" data-aos="fade-up" data-aos-delay="400">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                        </svg>
+                    </div>
+                    <div class="social-content">
+                        <h3>Twitter</h3>
+                        <p>@{{ current_user.twitter }}</p>
+                    </div>
+                    <div class="social-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </div>
+                </a>
+                {% endif %}
+
+                {% if current_user.facebook %}
+                <a href="{{ current_user.facebook }}" class="premium-social-card facebook" target="_blank" data-aos="fade-up" data-aos-delay="500">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </div>
+                    <div class="social-content">
+                        <h3>Facebook</h3>
+                        <p>Facebook Profile</p>
+                    </div>
+                    <div class="social-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </div>
+                </a>
+                {% endif %}
+
+                {% if current_user.linkedin %}
+                <a href="https://linkedin.com/in/{{ current_user.linkedin }}" class="premium-social-card linkedin" target="_blank" data-aos="fade-up" data-aos-delay="600">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </div>
+                    <div class="social-content">
+                        <h3>LinkedIn</h3>
+                        <p>Professional Profile</p>
+                    </div>
+                    <div class="social-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"/>
+                            <polyline points="7 7 17 7 17 17"/>
+                        </svg>
+                    </div>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Recent Reports Section -->
+        <div class="premium-section" data-aos="fade-up" data-aos-delay="400">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <div class="section-title-group">
+                    <h2 class="section-title">Recent Reports</h2>
+                    <p class="section-subtitle">Your latest missing person reports</p>
+                </div>
+            </div>
+
+            {% if current_user.reports %}
+            <div class="premium-reports-grid">
+                {% for report in current_user.reports[:3] %}
+                <div class="premium-report-card" data-aos="fade-up" data-aos-delay="{{ 500 + loop.index * 100 }}">
+                    <div class="report-header">
+                        <div class="report-avatar">
+                            {% if report.photo_url %}
+                            <img src="{{ report.photo_url }}" alt="{{ report.name }}">
+                            {% else %}
+                            <div class="default-report-avatar">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="report-status {{ report.status|lower if report.status else 'missing' }}">
+                            {{ report.status or 'Missing' }}
+                        </div>
+                    </div>
+                    <div class="report-content">
+                        <h3 class="report-name">{{ report.name }}</h3>
+                        <div class="report-details">
+                            <div class="report-detail">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                <span>{{ report.created_at.strftime('%B %d, %Y') if report.created_at else 'N/A' }}</span>
+                            </div>
+                            {% if report.location %}
+                            <div class="report-detail">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                <span>{{ report.location }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <a href="{{ url_for('main.simple_report', id=report.id) }}" class="premium-btn small">
+                            View Details
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="7" y1="17" x2="17" y2="7"/>
+                                <polyline points="7 7 17 7 17 17"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if current_user.reports|length > 3 %}
+            <div class="view-all-section" data-aos="fade-up" data-aos-delay="800">
+                <a href="{{ url_for('main.my_reports') }}" class="premium-btn secondary large">
+                    View All Reports ({{ current_user.reports|length }})
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </a>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="premium-empty-state" data-aos="fade-up" data-aos-delay="500">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <h3>No Reports Yet</h3>
+                <p>You haven't submitted any missing person reports yet. Start by creating your first report to help find missing persons.</p>
+                <a href="{{ url_for('main.report') }}" class="premium-btn primary large">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Create Your First Report
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Premium Styling -->
+<style>
+/* Premium Profile Hero Section */
+.profile-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-theme .profile-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.profile-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="400" r="150" fill="url(%23a)"/><circle cx="400" cy="800" r="120" fill="url(%23a)"/></svg>');
+}
+
+.profile-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.profile-hero .hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+                      radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+                      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    animation: particleFloat 20s linear infinite;
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-100px); }
+}
+
+.floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.floating-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.floating-element:nth-child(3) {
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.profile-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.profile-avatar-section {
+    margin-bottom: 2rem;
+}
+
+.premium-avatar {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.avatar-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.avatar-image:hover {
+    transform: scale(1.05);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.default-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.avatar-ring {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: avatarPulse 3s infinite;
+}
+
+@keyframes avatarPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+.avatar-status {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.avatar-status.online {
+    background: #10b981;
+    animation: statusBlink 2s infinite;
+}
+
+@keyframes statusBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.profile-name {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-email {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Premium Button Styles */
+.premium-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.premium-btn:hover::before {
+    left: 100%;
+}
+
+.premium-btn.primary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.premium-btn.primary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.premium-btn.secondary {
+    background: var(--bg-primary);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.premium-btn.secondary:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--primary-color-alpha);
+}
+
+.premium-btn.small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.premium-btn.large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* Profile Content Section */
+.profile-content-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .profile-content-section {
+    background: var(--bg-secondary);
+}
+
+.premium-section {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.premium-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .premium-section {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.section-title-group {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Premium Info Cards */
+.premium-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.premium-info-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.premium-info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+.dark-theme .premium-info-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.premium-info-card .info-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.premium-info-card .info-content {
+    flex: 1;
+}
+
+.premium-info-card .info-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.premium-info-card .info-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.premium-info-card .info-value.status-verified {
+    color: var(--success-color);
+}
+
+/* Premium Social Cards */
+.premium-social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.premium-social-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-social-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.premium-social-card:hover::before {
+    left: 100%;
+}
+
+.premium-social-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .premium-social-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.premium-social-card .social-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.premium-social-card.twitter .social-icon {
+    background: linear-gradient(135deg, #1da1f2 0%, #0d8bd9 100%);
+    color: white;
+}
+
+.premium-social-card.facebook .social-icon {
+    background: linear-gradient(135deg, #1877f2 0%, #0d65d9 100%);
+    color: white;
+}
+
+.premium-social-card.linkedin .social-icon {
+    background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+    color: white;
+}
+
+.premium-social-card .social-content {
+    flex: 1;
+}
+
+.premium-social-card .social-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.premium-social-card .social-content p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.premium-social-card .social-arrow {
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.premium-social-card:hover .social-arrow {
+    color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+/* Premium Reports Grid */
+.premium-reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.premium-report-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-report-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.premium-report-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+.dark-theme .premium-report-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.report-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.report-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.default-report-avatar {
+    width: 100%;
+    height: 100%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+}
+
+.report-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.report-status.missing {
+    background: var(--danger-light);
+    color: var(--danger-color);
+}
+
+.report-status.found {
+    background: var(--success-light);
+    color: var(--success-color);
+}
+
+.report-status.investigating {
+    background: var(--warning-light);
+    color: var(--warning-color);
+}
+
+.report-content {
+    margin-bottom: 1.5rem;
+}
+
+.report-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+}
+
+.report-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.report-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.report-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* View All Section */
+.view-all-section {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Premium Empty State */
+.premium-empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 2px dashed var(--border-color);
+}
+
+.empty-icon {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.premium-empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem 0;
+}
+
+.premium-empty-state p {
+    color: var(--text-secondary);
+    margin: 0 0 2rem 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-hero {
+        min-height: 60vh;
+    }
+
+    .profile-name {
+        font-size: 2.5rem;
+    }
+
+    .profile-stats {
+        gap: 2rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .premium-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+    }
+
+    .premium-section {
+        padding: 1.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .premium-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-social-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-name {
+        font-size: 2rem;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .premium-section {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class PremiumProfileSystem {
+    constructor() {
+        this.initializeAnimations();
+        this.initializeInteractions();
+        this.initializeThemeSupport();
+    }
+
+    initializeAnimations() {
+        // Initialize AOS animations if available
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-out-cubic',
+                once: true,
+                offset: 100
+            });
+        }
+
+        // Add scroll animations
+        this.addScrollAnimations();
+    }
+
+    addScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all premium sections
+        document.querySelectorAll('.premium-section').forEach(section => {
+            observer.observe(section);
+        });
+    }
+
+    initializeInteractions() {
+        // Add hover effects to cards
+        this.addCardHoverEffects();
+
+        // Add click animations to buttons
+        this.addButtonAnimations();
+
+        // Add avatar interactions
+        this.addAvatarInteractions();
+    }
+
+    addCardHoverEffects() {
+        const cards = document.querySelectorAll('.premium-info-card, .premium-social-card, .premium-report-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px) scale(1.02)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    }
+
+    addButtonAnimations() {
+        const buttons = document.querySelectorAll('.premium-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+
+                button.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    addAvatarInteractions() {
+        const avatar = document.querySelector('.premium-avatar');
+        if (avatar) {
+            avatar.addEventListener('click', () => {
+                avatar.style.animation = 'none';
+                setTimeout(() => {
+                    avatar.style.animation = 'avatarBounce 0.6s ease-out';
+                }, 10);
+            });
+        }
+
+        // Add avatar bounce animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes avatarBounce {
+                0%, 20%, 60%, 100% { transform: translateY(0) scale(1); }
+                40% { transform: translateY(-10px) scale(1.05); }
+                80% { transform: translateY(-5px) scale(1.02); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    initializeThemeSupport() {
+        this.updateTheme();
+
+        // Listen for theme changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    this.updateTheme();
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+
+    updateTheme() {
+        const isDark = document.body.classList.contains('dark-theme');
+        const profileHero = document.querySelector('.profile-hero');
+        const premiumSections = document.querySelectorAll('.premium-section');
+        const premiumCards = document.querySelectorAll('.premium-info-card, .premium-social-card, .premium-report-card');
+
+        if (isDark) {
+            profileHero?.classList.add('dark-theme');
+            premiumSections.forEach(section => section.classList.add('dark-theme'));
+            premiumCards.forEach(card => card.classList.add('dark-theme'));
+        } else {
+            profileHero?.classList.remove('dark-theme');
+            premiumSections.forEach(section => section.classList.remove('dark-theme'));
+            premiumCards.forEach(card => card.classList.remove('dark-theme'));
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `profile-notification profile-${type}`;
+        notification.textContent = message;
+
+        const colors = {
+            success: '#10b981',
+            error: '#dc2626',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: ${colors[type] || colors.info};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            font-weight: 500;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Global functions
+function shareProfile() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'My Rescue Profile',
+            text: 'Check out my profile on Rescue - helping find missing persons',
+            url: window.location.href
+        }).then(() => {
+            window.profileSystem?.showNotification('Profile shared successfully!', 'success');
+        }).catch(() => {
+            copyProfileLink();
+        });
+    } else {
+        copyProfileLink();
+    }
+}
+
+function copyProfileLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        window.profileSystem?.showNotification('Profile link copied to clipboard!', 'success');
+    }).catch(() => {
+        window.profileSystem?.showNotification('Failed to copy link', 'error');
+    });
+}
+
+// Initialize the profile system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.profileSystem = new PremiumProfileSystem();
+});
+</script>
+
+{% endblock %}

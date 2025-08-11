@@ -1,0 +1,1887 @@
+{% extends "base.html" %}
+{% block title %}Rescue - Advanced Missing Person Finder{% endblock %}
+{% block head_extra %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/premium_sections.css') }}">
+{% endblock %}
+{% block content %}
+<section class="hero" id="hero">
+    <!-- Premium Background Elements -->
+    <div class="hero-floating-elements">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <!-- Hero Particles -->
+    <div class="hero-particles" id="particles"></div>
+
+    <!-- Premium Hero Content -->
+    <div class="hero-content">
+        <!-- Premium Badge -->
+        <div class="hero-badge" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge-icon">🌟</span>
+            <span>Trusted by 50,000+ Families Worldwide</span>
+        </div>
+
+        <h1 data-aos="fade-up" data-aos-duration="1200">
+            <span class="hero-title-line">Reunite Loved Ones</span>
+            <span class="hero-title-line hero-title-accent">with AI-Powered Rescue</span>
+        </h1>
+
+        <p data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+            Join our mission to find missing persons using advanced AI technology, real-time alerts, and community support. Every second counts in bringing families together.
+        </p>
+
+        <!-- Premium Statistics -->
+        <div class="hero-stats" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+            <div class="hero-stat-item">
+                <div class="stat-number">15,000+</div>
+                <div class="stat-label">People Found</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Monitoring</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Countries</div>
+            </div>
+        </div>
+        <div class="hero-buttons" data-aos="fade-up" data-aos-delay="600" data-aos-duration="800">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Sign In
+                </a>
+            {% else %}
+                <a href="{{ url_for('main.report') }}" class="btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Report Missing
+                </a>
+                <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    </svg>
+                    View Reports
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Trust Indicators -->
+        <div class="hero-trust-indicators" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1000">
+            <div class="trust-item">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="AI Technology" class="trust-icon">
+                <span>AI-Powered</span>
+            </div>
+            <div class="trust-item">
+                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Global Network" class="trust-icon">
+                <span>Global Network</span>
+            </div>
+            <div class="trust-item">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Secure Platform" class="trust-icon">
+                <span>Secure Platform</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-scroll-indicator" data-aos="fade-up" data-aos-delay="1000">
+        <div class="scroll-arrow"></div>
+        <span>Scroll to explore</span>
+    </div>
+</section>
+
+<!-- Premium About Section -->
+<section class="premium-about-section" id="about">
+    <div class="about-container">
+        <div class="about-content" data-aos="fade-right" data-aos-duration="1000">
+            <div class="section-badge" data-aos="fade-up" data-aos-delay="100">
+                <span class="badge-icon">🎯</span>
+                <span class="badge-text">Our Mission</span>
+            </div>
+            <h2 class="about-title" data-aos="fade-up" data-aos-delay="200">
+                Reuniting Families Through
+                <span class="gradient-text">Advanced Technology</span>
+            </h2>
+            <p class="about-description" data-aos="fade-up" data-aos-delay="300">
+                We are dedicated to reuniting missing persons with their families through a secure, user-friendly platform powered by cutting-edge AI technology, machine learning algorithms, and human compassion.
+            </p>
+            <div class="about-features" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>AI-Powered Search</h4>
+                        <p>Advanced machine learning algorithms for faster, more accurate results</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Military-Grade Security</h4>
+                        <p>End-to-end encryption and privacy protection for all sensitive data</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h4>Global Community</h4>
+                        <p>Worldwide network of volunteers and law enforcement agencies</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-cta" data-aos="fade-up" data-aos-delay="500">
+                <a href="{{ url_for('main.contact') }}" class="btn-premium">
+                    <span>Learn More About Us</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="about-visual" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+            <div class="visual-card main-card">
+                <div class="card-header">
+                    <div class="card-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="card-title">Rescue Platform</div>
+                </div>
+                <div class="card-content">
+                    <div class="metric-item">
+                        <div class="metric-icon">👥</div>
+                        <div class="metric-data">
+                            <span class="metric-number" data-count="50000">0</span>
+                            <span class="metric-label">Active Users</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon">🔍</div>
+                        <div class="metric-data">
+                            <span class="metric-number" data-count="15000">0</span>
+                            <span class="metric-label">Cases Resolved</span>
+                        </div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-icon">🌍</div>
+                        <div class="metric-data">
+                            <span class="metric-number" data-count="120">0</span>
+                            <span class="metric-label">Countries</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-card floating-card" data-aos="zoom-in" data-aos-delay="600">
+                <div class="floating-content">
+                    <div class="success-icon">✅</div>
+                    <div class="success-text">
+                        <span class="success-title">Case Resolved</span>
+                        <span class="success-subtitle">Family reunited successfully</span>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-card stats-card" data-aos="zoom-in" data-aos-delay="800">
+                <div class="stats-content">
+                    <div class="chart-icon">📊</div>
+                    <div class="chart-data">
+                        <span class="chart-percentage">98.5%</span>
+                        <span class="chart-label">Success Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advanced Services Section -->
+<section class="premium-services-section" id="services">
+    <div class="services-container">
+        <div class="services-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">⚡</span>
+                <span class="badge-text">Our Services</span>
+            </div>
+            <h2 class="services-title">
+                Advanced Solutions for
+                <span class="gradient-text">Finding Missing Persons</span>
+            </h2>
+            <p class="services-description">
+                Discover our comprehensive suite of cutting-edge tools and services designed to maximize search effectiveness and bring families together faster than ever before.
+            </p>
+        </div>
+
+        <div class="services-grid" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <path d="M21 12c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                            <path d="M3 12c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                            <path d="M12 21c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                            <path d="M12 3c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1z"></path>
+                        </svg>
+                    </div>
+                    <div class="service-badge">AI</div>
+                </div>
+                <div class="service-content">
+                    <h3>AI-Powered Search Engine</h3>
+                    <p>Revolutionary machine learning algorithms that analyze facial features, behavioral patterns, and location data to provide the most accurate search results in real-time.</p>
+                    <ul class="service-features">
+                        <li>Facial recognition technology</li>
+                        <li>Behavioral pattern analysis</li>
+                        <li>Real-time location tracking</li>
+                        <li>Predictive modeling</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                    </div>
+                    <div class="service-badge">Secure</div>
+                </div>
+                <div class="service-content">
+                    <h3>Military-Grade Security</h3>
+                    <p>Enterprise-level security infrastructure with end-to-end encryption, multi-factor authentication, and compliance with international privacy standards.</p>
+                    <ul class="service-features">
+                        <li>End-to-end encryption</li>
+                        <li>Multi-factor authentication</li>
+                        <li>GDPR & CCPA compliant</li>
+                        <li>Secure data centers</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="300">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="service-badge">24/7</div>
+                </div>
+                <div class="service-content">
+                    <h3>Smart Assistant & Support</h3>
+                    <p>AI-powered chatbot and human support team available around the clock to provide guidance, emotional support, and real-time updates on search progress.</p>
+                    <ul class="service-features">
+                        <li>24/7 AI chatbot support</li>
+                        <li>Human expert assistance</li>
+                        <li>Emotional support resources</li>
+                        <li>Real-time progress updates</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="400">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="service-badge">Global</div>
+                </div>
+                <div class="service-content">
+                    <h3>Global Community Network</h3>
+                    <p>Connect with a worldwide network of volunteers, law enforcement agencies, NGOs, and organizations dedicated to reuniting families and finding missing persons.</p>
+                    <ul class="service-features">
+                        <li>Worldwide volunteer network</li>
+                        <li>Law enforcement partnerships</li>
+                        <li>NGO collaborations</li>
+                        <li>Community mobilization tools</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="500">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 2v20M14 2v20M4 7h16M4 17h16"></path>
+                        </svg>
+                    </div>
+                    <div class="service-badge">Alert</div>
+                </div>
+                <div class="service-content">
+                    <h3>Real-Time Alert System</h3>
+                    <p>Instant notification system that sends emergency alerts to relevant authorities, community members, and volunteers in the search area within seconds of a report.</p>
+                    <ul class="service-features">
+                        <li>Instant emergency alerts</li>
+                        <li>Geolocation-based notifications</li>
+                        <li>Multi-channel distribution</li>
+                        <li>Authority integration</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="service-card premium-card" data-aos="zoom-in" data-aos-delay="600">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    <div class="service-badge">Analytics</div>
+                </div>
+                <div class="service-content">
+                    <h3>Advanced Analytics & Insights</h3>
+                    <p>Comprehensive data analysis, predictive modeling, and pattern recognition to identify trends, optimize search strategies, and improve success rates.</p>
+                    <ul class="service-features">
+                        <li>Predictive analytics</li>
+                        <li>Pattern recognition</li>
+                        <li>Success rate optimization</li>
+                        <li>Detailed reporting</li>
+                    </ul>
+                </div>
+                <div class="service-footer">
+                    <a href="#" class="service-link">
+                        <span>Learn More</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ultra Premium Impact Section -->
+<section class="ultra-premium-impact-section" id="stats">
+    <div class="impact-background">
+        <div class="impact-gradient-overlay"></div>
+        <div class="impact-pattern"></div>
+        <div class="floating-particles">
+            <div class="particle" data-aos="zoom-in" data-aos-delay="100"></div>
+            <div class="particle" data-aos="zoom-in" data-aos-delay="200"></div>
+            <div class="particle" data-aos="zoom-in" data-aos-delay="300"></div>
+            <div class="particle" data-aos="zoom-in" data-aos-delay="400"></div>
+            <div class="particle" data-aos="zoom-in" data-aos-delay="500"></div>
+            <div class="particle" data-aos="zoom-in" data-aos-delay="600"></div>
+        </div>
+        <div class="impact-glow-effects">
+            <div class="glow-orb glow-1"></div>
+            <div class="glow-orb glow-2"></div>
+            <div class="glow-orb glow-3"></div>
+        </div>
+    </div>
+
+    <div class="impact-container">
+        <div class="impact-header" data-aos="fade-up">
+            <div class="premium-section-badge">
+                <div class="badge-glow"></div>
+                <span class="badge-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </span>
+                <span class="badge-text">Our Global Impact</span>
+                <div class="badge-shine"></div>
+            </div>
+            <h2 class="impact-title">
+                Transforming Lives
+                <span class="gradient-text-premium">Around the World</span>
+            </h2>
+            <p class="impact-description">
+                Every number tells a story of hope, determination, and the power of community. Together, we're building a safer world where no one stays missing for long.
+            </p>
+            <div class="impact-subtitle" data-aos="fade-up" data-aos-delay="200">
+                <div class="subtitle-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <span>Real-time data updated every 24 hours</span>
+            </div>
+        </div>
+
+        <div class="ultra-premium-stats-grid">
+            <div class="premium-impact-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-glow"></div>
+                <div class="card-background">
+                    <div class="card-pattern"></div>
+                </div>
+                <div class="stat-icon-container">
+                    <div class="icon-glow"></div>
+                    <div class="stat-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-trend positive">
+                        <div class="trend-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="trend-value">+15%</span>
+                        <span class="trend-period">this month</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number-container">
+                        <h3 class="stat-number" data-count="85000">0</h3>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label">Active Community</p>
+                    <span class="stat-sublabel">Families, volunteers & professionals</span>
+                </div>
+                <div class="stat-visual">
+                    <div class="progress-ring">
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="35" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="none"></circle>
+                            <circle cx="40" cy="40" r="35" stroke="url(#gradient1)" stroke-width="6" fill="none"
+                                    stroke-dasharray="220" stroke-dashoffset="33" stroke-linecap="round" class="progress-circle">
+                            </circle>
+                            <defs>
+                                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="ring-center">
+                            <span class="ring-percentage">85%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-impact-card featured" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-glow success"></div>
+                <div class="card-background">
+                    <div class="card-pattern"></div>
+                    <div class="success-indicator">
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring delay-1"></div>
+                        <div class="pulse-ring delay-2"></div>
+                    </div>
+                </div>
+                <div class="stat-icon-container">
+                    <div class="icon-glow success"></div>
+                    <div class="stat-icon success">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-trend positive">
+                        <div class="trend-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="trend-value">+28%</span>
+                        <span class="trend-period">this month</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number-container">
+                        <h3 class="stat-number" data-count="22500">0</h3>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label">Lives Reunited</p>
+                    <span class="stat-sublabel">Successful family reunions worldwide</span>
+                </div>
+                <div class="stat-visual">
+                    <div class="success-animation">
+                        <div class="heart-beat">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </div>
+                        <div class="success-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-impact-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-glow global"></div>
+                <div class="card-background">
+                    <div class="card-pattern"></div>
+                    <div class="globe-animation">
+                        <div class="rotating-globe"></div>
+                    </div>
+                </div>
+                <div class="stat-icon-container">
+                    <div class="icon-glow global"></div>
+                    <div class="stat-icon global">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-trend positive">
+                        <div class="trend-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="trend-value">+12%</span>
+                        <span class="trend-period">this quarter</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number-container">
+                        <h3 class="stat-number" data-count="195">0</h3>
+                        <span class="stat-suffix">+</span>
+                    </div>
+                    <p class="stat-label">Global Reach</p>
+                    <span class="stat-sublabel">Countries & territories worldwide</span>
+                </div>
+                <div class="stat-visual">
+                    <div class="world-map">
+                        <div class="map-dot active" style="top: 30%; left: 20%;"></div>
+                        <div class="map-dot active" style="top: 40%; left: 50%;"></div>
+                        <div class="map-dot active" style="top: 60%; left: 80%;"></div>
+                        <div class="map-dot" style="top: 25%; left: 70%;"></div>
+                        <div class="map-dot" style="top: 70%; left: 30%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-impact-card excellence" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-glow excellence"></div>
+                <div class="card-background">
+                    <div class="card-pattern"></div>
+                    <div class="excellence-badge">
+                        <div class="badge-shine"></div>
+                    </div>
+                </div>
+                <div class="stat-icon-container">
+                    <div class="icon-glow excellence"></div>
+                    <div class="stat-icon excellence">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-trend positive">
+                        <div class="trend-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <span class="trend-value">+5%</span>
+                        <span class="trend-period">this year</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number-container">
+                        <h3 class="stat-number" data-count="99.2">0</h3>
+                        <span class="stat-suffix">%</span>
+                    </div>
+                    <p class="stat-label">Success Rate</p>
+                    <span class="stat-sublabel">Industry-leading effectiveness</span>
+                </div>
+                <div class="stat-visual">
+                    <div class="excellence-meter">
+                        <div class="meter-arc">
+                            <svg width="100" height="60" viewBox="0 0 100 60">
+                                <path d="M 10 50 A 40 40 0 0 1 90 50" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"></path>
+                                <path d="M 10 50 A 40 40 0 0 1 90 50" stroke="url(#excellenceGradient)" stroke-width="8" fill="none"
+                                      stroke-dasharray="125" stroke-dashoffset="6" stroke-linecap="round" class="meter-progress">
+                                </path>
+                                <defs>
+                                    <linearGradient id="excellenceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="meter-label">Excellence</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-achievements-section" data-aos="fade-up" data-aos-delay="500">
+            <div class="achievements-header">
+                <h3 class="achievements-title">Recognized Excellence</h3>
+                <p class="achievements-subtitle">Trusted by organizations worldwide</p>
+            </div>
+            <div class="premium-achievement-badges">
+                <div class="premium-achievement-badge" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="badge-glow award"></div>
+                    <div class="badge-icon award">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="badge-content">
+                        <span class="badge-title">Global Award Winner</span>
+                        <span class="badge-subtitle">Best Social Impact Platform 2024</span>
+                        <span class="badge-year">2024</span>
+                    </div>
+                    <div class="badge-shine"></div>
+                </div>
+
+                <div class="premium-achievement-badge" data-aos="zoom-in" data-aos-delay="700">
+                    <div class="badge-glow security"></div>
+                    <div class="badge-icon security">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <div class="badge-content">
+                        <span class="badge-title">Security Certified</span>
+                        <span class="badge-subtitle">ISO 27001 & SOC 2 Compliant</span>
+                        <span class="badge-year">2024</span>
+                    </div>
+                    <div class="badge-shine"></div>
+                </div>
+
+                <div class="premium-achievement-badge" data-aos="zoom-in" data-aos-delay="800">
+                    <div class="badge-glow partnership"></div>
+                    <div class="badge-icon partnership">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="badge-content">
+                        <span class="badge-title">UN Partner</span>
+                        <span class="badge-subtitle">Global Compact Member</span>
+                        <span class="badge-year">2023</span>
+                    </div>
+                    <div class="badge-shine"></div>
+                </div>
+
+                <div class="premium-achievement-badge" data-aos="zoom-in" data-aos-delay="900">
+                    <div class="badge-glow innovation"></div>
+                    <div class="badge-icon innovation">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="badge-content">
+                        <span class="badge-title">AI Innovation</span>
+                        <span class="badge-subtitle">Tech Excellence Award</span>
+                        <span class="badge-year">2024</span>
+                    </div>
+                    <div class="badge-shine"></div>
+                </div>
+            </div>
+
+            <div class="impact-summary" data-aos="fade-up" data-aos-delay="1000">
+                <div class="summary-stat">
+                    <span class="summary-number">4.9★</span>
+                    <span class="summary-label">User Rating</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="summary-number">24/7</span>
+                    <span class="summary-label">Global Support</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="summary-number">99.9%</span>
+                    <span class="summary-label">Uptime</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Testimonials Section -->
+<section class="premium-testimonials-section" id="testimonials">
+    <div class="testimonials-container">
+        <div class="testimonials-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">💬</span>
+                <span class="badge-text">Success Stories</span>
+            </div>
+            <h2 class="testimonials-title">
+                Real Stories from
+                <span class="gradient-text">Reunited Families</span>
+            </h2>
+            <p class="testimonials-description">
+                Hear directly from families who found hope and healing through our platform. Every story represents a life changed and a family reunited.
+            </p>
+        </div>
+
+        <div class="testimonials-carousel" data-aos="fade-up" data-aos-delay="200">
+            <div class="testimonial-track" id="testimonialTrack">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-content">
+                        <div class="testimonial-quote">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                                <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "Rescue helped us find my brother within 48 hours. The AI-powered search and real-time alerts made all the difference. The platform is incredibly user-friendly, and the support team was there for us every step of the way during the most difficult time of our lives."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=80&h=80&fit=crop&crop=face" alt="Sarah Martinez" loading="lazy">
+                            </div>
+                            <div class="author-info">
+                                <h4>Sarah Martinez</h4>
+                                <span class="author-role">Family Member</span>
+                                <div class="author-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>Los Angeles, CA</span>
+                                </div>
+                            </div>
+                            <div class="testimonial-rating">
+                                <div class="stars">
+                                    <span>★★★★★</span>
+                                </div>
+                                <span class="rating-text">5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="testimonial-quote">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                                <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "As a volunteer coordinator, I have seen firsthand how Rescue's global network mobilizes communities. The real-time filtering and facial recognition technology helped us locate a missing teenager in record time. This platform is revolutionizing how we approach missing person cases."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" alt="James Thompson" loading="lazy">
+                            </div>
+                            <div class="author-info">
+                                <h4>James Thompson</h4>
+                                <span class="author-role">Community Volunteer</span>
+                                <div class="author-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>Toronto, Canada</span>
+                                </div>
+                            </div>
+                            <div class="testimonial-rating">
+                                <div class="stars">
+                                    <span>★★★★★</span>
+                                </div>
+                                <span class="rating-text">5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="testimonial-quote">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
+                                <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
+                            </svg>
+                        </div>
+                        <p class="testimonial-text">
+                            "The security and privacy features gave us complete peace of mind during an incredibly vulnerable time. Knowing our data was protected with military-grade encryption while still being accessible to the right people made all the difference in our search efforts."
+                        </p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" alt="Emily Rodriguez" loading="lazy">
+                            </div>
+                            <div class="author-info">
+                                <h4>Emily Rodriguez</h4>
+                                <span class="author-role">Parent</span>
+                                <div class="author-location">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span>Madrid, Spain</span>
+                                </div>
+                            </div>
+                            <div class="testimonial-rating">
+                                <div class="stars">
+                                    <span>★★★★★</span>
+                                </div>
+                                <span class="rating-text">5.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button class="carousel-btn prev-btn" id="prevBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <div class="carousel-indicators" id="carouselIndicators">
+                    <button class="indicator active" data-slide="0"></button>
+                    <button class="indicator" data-slide="1"></button>
+                    <button class="indicator" data-slide="2"></button>
+                </div>
+                <button class="carousel-btn next-btn" id="nextBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="testimonials-stats" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-item">
+                <h3>4.9/5</h3>
+                <p>Average Rating</p>
+            </div>
+            <div class="stat-item">
+                <h3>12,000+</h3>
+                <p>Success Stories</p>
+            </div>
+            <div class="stat-item">
+                <h3>98.7%</h3>
+                <p>Satisfaction Rate</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Advanced How It Works Section -->
+<section class="premium-how-it-works-section" id="how-it-works">
+    <div class="how-it-works-container">
+        <div class="how-it-works-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">⚡</span>
+                <span class="badge-text">Simple Process</span>
+            </div>
+            <h2 class="how-it-works-title">
+                How Rescue Works in
+                <span class="gradient-text">4 Simple Steps</span>
+            </h2>
+            <p class="how-it-works-description">
+                Our streamlined process makes it easy for anyone to report missing persons or join the search effort. Every step is designed with urgency and efficiency in mind.
+            </p>
+        </div>
+
+        <div class="steps-timeline" data-aos="fade-up" data-aos-delay="200">
+            <div class="timeline-line"></div>
+
+            <div class="step-item" data-aos="fade-right" data-aos-delay="100">
+                <div class="step-number">
+                    <span>01</span>
+                    <div class="step-pulse"></div>
+                </div>
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>Create Account</h3>
+                    <p>Sign up for free in under 2 minutes. Verify your identity to ensure platform security and build trust within our community.</p>
+                    <div class="step-features">
+                        <span class="feature-tag">Free Registration</span>
+                        <span class="feature-tag">Identity Verification</span>
+                        <span class="feature-tag">Instant Access</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-item" data-aos="fade-left" data-aos-delay="200">
+                <div class="step-number">
+                    <span>02</span>
+                    <div class="step-pulse"></div>
+                </div>
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Submit Report</h3>
+                    <p>Provide detailed information and photos. Our AI-powered system processes your report instantly and creates searchable profiles.</p>
+                    <div class="step-features">
+                        <span class="feature-tag">AI Processing</span>
+                        <span class="feature-tag">Photo Upload</span>
+                        <span class="feature-tag">Instant Publishing</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-item" data-aos="fade-right" data-aos-delay="300">
+                <div class="step-number">
+                    <span>03</span>
+                    <div class="step-pulse"></div>
+                </div>
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 2v20M14 2v20M4 7h16M4 17h16"></path>
+                        </svg>
+                    </div>
+                    <h3>Global Alert System</h3>
+                    <p>Your report is instantly distributed to our global network of volunteers, law enforcement, and partner organizations worldwide.</p>
+                    <div class="step-features">
+                        <span class="feature-tag">Real-time Alerts</span>
+                        <span class="feature-tag">Global Network</span>
+                        <span class="feature-tag">Law Enforcement</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-item" data-aos="fade-left" data-aos-delay="400">
+                <div class="step-number">
+                    <span>04</span>
+                    <div class="step-pulse"></div>
+                </div>
+                <div class="step-content">
+                    <div class="step-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <h3>Track & Reunite</h3>
+                    <p>Monitor search progress in real-time, receive updates, and coordinate with our support team until your loved one is safely reunited.</p>
+                    <div class="step-features">
+                        <span class="feature-tag">Live Tracking</span>
+                        <span class="feature-tag">24/7 Support</span>
+                        <span class="feature-tag">Success Guarantee</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="how-it-works-cta" data-aos="fade-up" data-aos-delay="500">
+            <div class="cta-content">
+                <h3>Ready to Get Started?</h3>
+                <p>Join thousands of families who trust Rescue to bring their loved ones home safely.</p>
+                <div class="cta-buttons">
+                    {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.register') }}" class="btn-primary-modern">
+                            <span>Start Now - It's Free</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="7" y1="17" x2="17" y2="7"></line>
+                                <polyline points="7 7 17 7 17 17"></polyline>
+                            </svg>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('main.report') }}" class="btn-primary-modern">
+                            <span>Report Missing Person</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="11" x2="12" y2="17"></line>
+                                <line x1="9" y1="14" x2="15" y2="14"></line>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    <a href="#testimonials" class="btn-secondary-modern">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <span>See Success Stories</span>
+                    </a>
+                </div>
+            </div>
+            <div class="cta-stats">
+                <div class="stat-item">
+                    <span class="stat-number">2 min</span>
+                    <span class="stat-label">Average Setup Time</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support Available</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">98.7%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ultra Premium Take Action Section -->
+<section class="ultra-premium-action-section" id="cta">
+    <div class="action-background">
+        <div class="action-gradient-mesh"></div>
+        <div class="action-pattern"></div>
+        <div class="action-glow-effects">
+            <div class="action-glow primary"></div>
+            <div class="action-glow secondary"></div>
+            <div class="action-glow tertiary"></div>
+        </div>
+        <div class="floating-action-elements">
+            <div class="action-particle" data-aos="zoom-in" data-aos-delay="100"></div>
+            <div class="action-particle" data-aos="zoom-in" data-aos-delay="200"></div>
+            <div class="action-particle" data-aos="zoom-in" data-aos-delay="300"></div>
+            <div class="action-particle" data-aos="zoom-in" data-aos-delay="400"></div>
+            <div class="action-particle" data-aos="zoom-in" data-aos-delay="500"></div>
+        </div>
+        <div class="action-waves">
+            <div class="wave wave-1"></div>
+            <div class="wave wave-2"></div>
+            <div class="wave wave-3"></div>
+        </div>
+    </div>
+
+    <div class="action-container">
+        <div class="action-content" data-aos="fade-right">
+            <div class="premium-action-badge">
+                <div class="badge-glow-ring"></div>
+                <span class="badge-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                    </svg>
+                </span>
+                <span class="badge-text">Take Action Now</span>
+                <div class="badge-pulse"></div>
+            </div>
+
+            <h2 class="action-title">
+                Your Next Step Could
+                <span class="gradient-text-action">Save a Life</span>
+            </h2>
+
+            <p class="action-description">
+                Join our global community of heroes making a real difference. Every report submitted, every search shared, and every volunteer hour contributed brings families closer to reunion. The time to act is now.
+            </p>
+
+            <div class="action-urgency" data-aos="fade-up" data-aos-delay="200">
+                <div class="urgency-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="urgency-text">
+                    <span class="urgency-stat">Every 40 seconds</span>
+                    <span class="urgency-desc">a missing person is reported worldwide</span>
+                </div>
+            </div>
+            <div class="premium-action-buttons" data-aos="fade-up" data-aos-delay="300">
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn-action-primary">
+                        <div class="btn-glow"></div>
+                        <div class="btn-content">
+                            <span class="btn-text">Join the Mission</span>
+                            <span class="btn-subtext">Start saving lives today</span>
+                        </div>
+                        <div class="btn-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                        </div>
+                        <div class="btn-shine"></div>
+                    </a>
+                    <a href="{{ url_for('main.contact') }}" class="btn-action-secondary">
+                        <div class="btn-content">
+                            <span class="btn-text">Get Emergency Help</span>
+                            <span class="btn-subtext">24/7 support available</span>
+                        </div>
+                        <div class="btn-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('main.report') }}" class="btn-action-primary">
+                        <div class="btn-glow"></div>
+                        <div class="btn-content">
+                            <span class="btn-text">Report Missing Person</span>
+                            <span class="btn-subtext">Help someone find their way home</span>
+                        </div>
+                        <div class="btn-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="11" x2="12" y2="17"></line>
+                                <line x1="9" y1="14" x2="15" y2="14"></line>
+                            </svg>
+                        </div>
+                        <div class="btn-shine"></div>
+                    </a>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn-action-secondary">
+                        <div class="btn-content">
+                            <span class="btn-text">View Dashboard</span>
+                            <span class="btn-subtext">Manage your reports</span>
+                        </div>
+                        <div class="btn-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            </svg>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="premium-action-features" data-aos="fade-up" data-aos-delay="400">
+                <div class="action-feature-item">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <span class="feature-title">100% Free</span>
+                        <span class="feature-desc">No hidden costs, ever</span>
+                    </div>
+                </div>
+                <div class="action-feature-item">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <span class="feature-title">Military-Grade Security</span>
+                        <span class="feature-desc">Your data is protected</span>
+                    </div>
+                </div>
+                <div class="action-feature-item">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <span class="feature-title">24/7 Global Support</span>
+                        <span class="feature-desc">Always here when you need us</span>
+                    </div>
+                </div>
+                <div class="action-feature-item">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                        </svg>
+                    </div>
+                    <div class="feature-content">
+                        <span class="feature-title">Instant Activation</span>
+                        <span class="feature-desc">Start helping immediately</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="premium-action-visual" data-aos="fade-left" data-aos-delay="500">
+            <div class="action-visual-main">
+                <div class="hero-dashboard">
+                    <div class="dashboard-header">
+                        <div class="dashboard-title">
+                            <div class="title-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                </svg>
+                            </div>
+                            <span>Rescue Command Center</span>
+                        </div>
+                        <div class="dashboard-status">
+                            <div class="status-dot active"></div>
+                            <span>Live</span>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-content">
+                        <div class="success-notification">
+                            <div class="notification-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </div>
+                            <div class="notification-content">
+                                <span class="notification-title">Family Reunited!</span>
+                                <span class="notification-subtitle">Sarah found safe in Los Angeles</span>
+                                <span class="notification-time">2 minutes ago</span>
+                            </div>
+                            <div class="notification-pulse"></div>
+                        </div>
+
+                        <div class="live-stats-grid">
+                            <div class="live-stat">
+                                <span class="stat-value">22.5K</span>
+                                <span class="stat-label">Lives Saved</span>
+                                <div class="stat-trend">+15%</div>
+                            </div>
+                            <div class="live-stat">
+                                <span class="stat-value">195</span>
+                                <span class="stat-label">Countries</span>
+                                <div class="stat-trend">+12%</div>
+                            </div>
+                            <div class="live-stat">
+                                <span class="stat-value">99.2%</span>
+                                <span class="stat-label">Success Rate</span>
+                                <div class="stat-trend">+5%</div>
+                            </div>
+                        </div>
+
+                        <div class="action-progress-ring">
+                            <svg width="140" height="140" viewBox="0 0 140 140">
+                                <circle cx="70" cy="70" r="60" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"></circle>
+                                <circle cx="70" cy="70" r="60" stroke="url(#actionGradient)" stroke-width="8" fill="none"
+                                        stroke-dasharray="377" stroke-dashoffset="38" stroke-linecap="round" class="action-progress-circle">
+                                    <animate attributeName="stroke-dashoffset" values="377;38" dur="3s" begin="0s" fill="freeze"/>
+                                </circle>
+                                <defs>
+                                    <linearGradient id="actionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#45b7d1;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="progress-center">
+                                <span class="progress-percentage">90%</span>
+                                <span class="progress-text">Success Rate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="floating-action-bubbles">
+                <div class="action-bubble primary" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="bubble-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="bubble-content">
+                        <span class="bubble-number">85K+</span>
+                        <span class="bubble-label">Active Heroes</span>
+                    </div>
+                </div>
+
+                <div class="action-bubble secondary" data-aos="zoom-in" data-aos-delay="800">
+                    <div class="bubble-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="bubble-content">
+                        <span class="bubble-number">24/7</span>
+                        <span class="bubble-label">Support</span>
+                    </div>
+                </div>
+
+                <div class="action-bubble tertiary" data-aos="zoom-in" data-aos-delay="1000">
+                    <div class="bubble-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                        </svg>
+                    </div>
+                    <div class="bubble-content">
+                        <span class="bubble-number">2 min</span>
+                        <span class="bubble-label">Avg Response</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Footer -->
+<footer class="premium-footer" id="footer">
+    <div class="footer-background">
+        <div class="footer-pattern"></div>
+        <div class="footer-glow"></div>
+    </div>
+    <div class="footer-container">
+        <div class="footer-main">
+            <div class="footer-brand" data-aos="fade-up">
+                <div class="brand-logo">
+                    <div class="logo-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h3>Rescue</h3>
+                        <span>Reuniting Families</span>
+                    </div>
+                </div>
+                <p class="brand-description">
+                    Rescue is the world's most trusted platform for finding missing persons, powered by advanced AI technology and a global community of volunteers dedicated to reuniting families.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                            <rect x="2" y="9" width="4" height="12"></rect>
+                            <circle cx="4" cy="4" r="2"></circle>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-links" data-aos="fade-up" data-aos-delay="100">
+                <div class="link-group">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="{{ url_for('main.report') }}">Report Missing</a></li>
+                        <li><a href="{{ url_for('main.dashboard') }}">Search Reports</a></li>
+                        <li><a href="#services">How It Works</a></li>
+                        <li><a href="#stats">Success Stories</a></li>
+                        <li><a href="{{ url_for('main.contact') }}">Emergency Help</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Safety Guidelines</a></li>
+                        <li><a href="#">Prevention Tips</a></li>
+                        <li><a href="#">Support Center</a></li>
+                        <li><a href="#">Training Materials</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Volunteer Program</a></li>
+                        <li><a href="#">Partner Organizations</a></li>
+                        <li><a href="#">Law Enforcement</a></li>
+                        <li><a href="#">Global Network</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press Kit</a></li>
+                        <li><a href="{{ url_for('main.contact') }}">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-newsletter" data-aos="fade-up" data-aos-delay="200">
+                <h4>Stay Updated</h4>
+                <p>Get the latest updates on missing person cases and platform improvements.</p>
+                <form class="newsletter-form">
+                    <div class="input-group">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="subscribe-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+                <div class="newsletter-features">
+                    <div class="feature-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        <span>Weekly updates</span>
+                    </div>
+                    <div class="feature-item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        <span>No spam, unsubscribe anytime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <div class="footer-legal" data-aos="fade-up">
+                    <p>&copy; 2024 Rescue Platform. All rights reserved.</p>
+                    <div class="legal-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                        <a href="#">GDPR Compliance</a>
+                    </div>
+                </div>
+                <div class="footer-certifications" data-aos="fade-up" data-aos-delay="100">
+                    <div class="cert-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="16" r="1"></circle>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span>ISO 27001 Certified</span>
+                    </div>
+                    <div class="cert-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                        <span>GDPR Compliant</span>
+                    </div>
+                    <div class="cert-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% block footer %}
+<!-- Premium footer is included in the content block above -->
+{% endblock %}
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script>
+    // Initialize AOS (Animate On Scroll)
+    AOS.init({
+        duration: 1000,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100
+    });
+
+    // Modern smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Hero scroll indicator functionality
+    const scrollIndicator = document.querySelector('.hero-scroll-indicator');
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            const nextSection = document.querySelector('.mission-section');
+            if (nextSection) {
+                nextSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
+
+    // Advanced parallax effect for hero
+    const hero = document.querySelector('.hero');
+    const heroContent = document.querySelector('.hero-content');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * -0.5;
+
+        if (hero && scrolled < hero.offsetHeight) {
+            heroContent.style.transform = `translateY(${rate}px)`;
+        }
+    });
+
+    // Dynamic particle creation
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.cssText = `
+                position: absolute;
+                width: ${Math.random() * 4 + 2}px;
+                height: ${Math.random() * 4 + 2}px;
+                background: rgba(255, 255, 255, ${Math.random() * 0.5 + 0.2});
+                border-radius: 50%;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation: particleFloat ${Math.random() * 10 + 5}s ease-in-out infinite;
+                animation-delay: ${Math.random() * 5}s;
+            `;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Enhanced stats counter animation
+    const stats = document.querySelectorAll('.stat-item h3');
+    const animateStats = () => {
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            let count = 0;
+            const increment = target / 100;
+            const updateCount = () => {
+                if (count < target) {
+                    count += increment;
+                    stat.textContent = Math.floor(count);
+                    requestAnimationFrame(updateCount);
+                } else {
+                    stat.textContent = target;
+                }
+            };
+            updateCount();
+        });
+    };
+
+    // Enhanced intersection observer for animations
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('stats-section')) {
+                    animateStats();
+                }
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
+
+    // Observe sections for animations
+    document.querySelectorAll('.content-section, .stats-section, .mission-section').forEach(section => {
+        observer.observe(section);
+    });
+
+    // Feature card hover effects
+    document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Initialize particles when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        createParticles();
+
+        // Add loading animation to buttons
+        document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (!this.classList.contains('loading')) {
+                    this.classList.add('loading');
+                    setTimeout(() => {
+                        this.classList.remove('loading');
+                    }, 2000);
+                }
+            });
+        });
+    });
+
+    // Advanced scroll effects
+    let ticking = false;
+
+    function updateScrollEffects() {
+        const scrolled = window.pageYOffset;
+        const viewportHeight = window.innerHeight;
+
+        // Update hero background position
+        if (hero) {
+            hero.style.backgroundPosition = `center ${scrolled * 0.5}px`;
+        }
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateScrollEffects);
+            ticking = true;
+        }
+    });
+
+    // Premium Testimonials Carousel Functionality
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showSlide(index) {
+        // Hide all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Remove active from all indicators
+        indicators.forEach(indicator => {
+            indicator.classList.remove('active');
+        });
+
+        // Show current slide
+        if (slides[index]) {
+            slides[index].classList.add('active');
+        }
+
+        // Activate current indicator
+        if (indicators[index]) {
+            indicators[index].classList.add('active');
+        }
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Event listeners for carousel controls
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextSlide);
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevSlide);
+    }
+
+    // Indicator click events
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+        });
+    });
+
+    // Auto-play carousel
+    let autoPlayInterval = setInterval(nextSlide, 5000);
+
+    // Pause auto-play on hover
+    const carousel = document.querySelector('.testimonials-carousel');
+    if (carousel) {
+        carousel.addEventListener('mouseenter', () => {
+            clearInterval(autoPlayInterval);
+        });
+
+        carousel.addEventListener('mouseleave', () => {
+            autoPlayInterval = setInterval(nextSlide, 5000);
+        });
+    }
+
+    // Newsletter form functionality
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+
+            // Add loading state
+            const submitBtn = this.querySelector('.subscribe-btn');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="spinner"></div>';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                submitBtn.innerHTML = '✓';
+                submitBtn.style.background = '#10b981';
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '';
+                    this.querySelector('input[type="email"]').value = '';
+                }, 2000);
+            }, 1500);
+        });
+    }
+
+    // Enhanced scroll animations for timeline
+    const timelineItems = document.querySelectorAll('.step-item');
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    timelineItems.forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(30px)';
+        item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        timelineObserver.observe(item);
+    });
+
+    // Add interactive hover effects to step items
+    timelineItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px) scale(1.02)';
+        });
+
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+</script>
+{% endblock %}

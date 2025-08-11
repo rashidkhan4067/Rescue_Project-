@@ -1,0 +1,1419 @@
+{% extends "base.html" %}
+{% block title %}Advanced Search & Filter - Rescue{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section filter-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                <span>Advanced Search</span>
+            </div>
+            <h1 class="hero-title">Find Missing Persons</h1>
+            <p class="hero-subtitle">Use our advanced filtering system to search through missing person reports with precision and speed</p>
+        </div>
+    </div>
+</section>
+
+<!-- Advanced Filter Section -->
+<section class="filter-section">
+    <div class="container">
+        <!-- Filter Header -->
+        <div class="filter-header" data-aos="fade-up">
+            <div class="filter-title-group">
+                <h2 class="filter-title">Advanced Search Filters</h2>
+                <p class="filter-subtitle">Refine your search with multiple criteria to find specific reports</p>
+            </div>
+            <div class="filter-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalReports">{{ reports|length if reports else 0 }}</span>
+                    <span class="stat-label">Total Reports</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="filteredCount">{{ reports|length if reports else 0 }}</span>
+                    <span class="stat-label">Filtered Results</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Filter Form -->
+        <div class="premium-filter-container" data-aos="fade-up" data-aos-delay="200">
+            <form class="premium-filter-form" id="filterForm" method="GET" action="{{ url_for('utils.filter') }}">
+                <!-- Search Bar -->
+                <div class="filter-row primary-search">
+                    <div class="search-group">
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                            <input type="text" name="q" id="searchInput" class="search-input" placeholder="Search by name, location, or description..." value="{{ request.args.get('q', '') }}">
+                            <button type="button" class="clear-search" id="clearSearch" style="display: none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <button type="submit" class="search-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="filter-row advanced-filters">
+                    <!-- Personal Information Filters -->
+                    <div class="filter-group">
+                        <h3 class="filter-group-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Personal Information
+                        </h3>
+                        <div class="filter-controls">
+                            <div class="filter-control">
+                                <label for="gender">Gender</label>
+                                <select name="gender" id="gender" class="premium-select">
+                                    <option value="">All Genders</option>
+                                    <option value="Male" {{ 'selected' if request.args.get('gender') == 'Male' }}>Male</option>
+                                    <option value="Female" {{ 'selected' if request.args.get('gender') == 'Female' }}>Female</option>
+                                    <option value="Non-binary" {{ 'selected' if request.args.get('gender') == 'Non-binary' }}>Non-binary</option>
+                                    <option value="Other" {{ 'selected' if request.args.get('gender') == 'Other' }}>Other</option>
+                                </select>
+                            </div>
+                            <div class="filter-control">
+                                <label for="ageRange">Age Range</label>
+                                <select name="age_range" id="ageRange" class="premium-select">
+                                    <option value="">All Ages</option>
+                                    <option value="0-12" {{ 'selected' if request.args.get('age_range') == '0-12' }}>Child (0-12)</option>
+                                    <option value="13-17" {{ 'selected' if request.args.get('age_range') == '13-17' }}>Teen (13-17)</option>
+                                    <option value="18-30" {{ 'selected' if request.args.get('age_range') == '18-30' }}>Young Adult (18-30)</option>
+                                    <option value="31-50" {{ 'selected' if request.args.get('age_range') == '31-50' }}>Adult (31-50)</option>
+                                    <option value="51-70" {{ 'selected' if request.args.get('age_range') == '51-70' }}>Middle Age (51-70)</option>
+                                    <option value="71-120" {{ 'selected' if request.args.get('age_range') == '71-120' }}>Senior (71+)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Location Filters -->
+                    <div class="filter-group">
+                        <h3 class="filter-group-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            Location & Time
+                        </h3>
+                        <div class="filter-controls">
+                            <div class="filter-control">
+                                <label for="area">Location</label>
+                                <input type="text" name="area" id="area" class="premium-input" placeholder="City, area, or landmark..." value="{{ request.args.get('area', '') }}">
+                            </div>
+                            <div class="filter-control">
+                                <label for="dateRange">Date Range</label>
+                                <select name="date_range" id="dateRange" class="premium-select">
+                                    <option value="">All Dates</option>
+                                    <option value="today" {{ 'selected' if request.args.get('date_range') == 'today' }}>Today</option>
+                                    <option value="week" {{ 'selected' if request.args.get('date_range') == 'week' }}>This Week</option>
+                                    <option value="month" {{ 'selected' if request.args.get('date_range') == 'month' }}>This Month</option>
+                                    <option value="3months" {{ 'selected' if request.args.get('date_range') == '3months' }}>Last 3 Months</option>
+                                    <option value="6months" {{ 'selected' if request.args.get('date_range') == '6months' }}>Last 6 Months</option>
+                                    <option value="year" {{ 'selected' if request.args.get('date_range') == 'year' }}>This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status & Priority Filters -->
+                    <div class="filter-group">
+                        <h3 class="filter-group-title">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12" y2="17"></line>
+                            </svg>
+                            Status & Priority
+                        </h3>
+                        <div class="filter-controls">
+                            <div class="filter-control">
+                                <label for="status">Report Status</label>
+                                <select name="status" id="status" class="premium-select">
+                                    <option value="">All Status</option>
+                                    <option value="active" {{ 'selected' if request.args.get('status') == 'active' }}>Active</option>
+                                    <option value="found" {{ 'selected' if request.args.get('status') == 'found' }}>Found</option>
+                                    <option value="closed" {{ 'selected' if request.args.get('status') == 'closed' }}>Closed</option>
+                                </select>
+                            </div>
+                            <div class="filter-control">
+                                <label for="sortBy">Sort By</label>
+                                <select name="sort" id="sortBy" class="premium-select">
+                                    <option value="newest" {{ 'selected' if request.args.get('sort') == 'newest' }}>Newest First</option>
+                                    <option value="oldest" {{ 'selected' if request.args.get('sort') == 'oldest' }}>Oldest First</option>
+                                    <option value="name" {{ 'selected' if request.args.get('sort') == 'name' }}>Name A-Z</option>
+                                    <option value="age_asc" {{ 'selected' if request.args.get('sort') == 'age_asc' }}>Age (Low to High)</option>
+                                    <option value="age_desc" {{ 'selected' if request.args.get('sort') == 'age_desc' }}>Age (High to Low)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Actions -->
+                <div class="filter-actions">
+                    <button type="button" class="btn-secondary" id="clearFilters">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18l-2 13H5L3 6z"></path>
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Clear All Filters
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection" data-aos="fade-up" data-aos-delay="400">
+            <div class="results-header">
+                <h3 class="results-title">Search Results</h3>
+                <div class="results-meta">
+                    <span class="results-count" id="resultsCount">{{ reports|length if reports else 0 }} reports found</span>
+                    <div class="view-toggle">
+                        <button type="button" class="view-btn active" data-view="grid">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </button>
+                        <button type="button" class="view-btn" data-view="list">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-container" id="resultsContainer">
+                {% if reports %}
+                    <div class="reports-grid" id="reportsGrid">
+                        {% for report in reports %}
+                        <div class="premium-report-card" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                            {% if report.image %}
+                            <div class="report-image">
+                                <img src="{{ url_for('static', filename='uploads/' + report.image) }}" alt="Photo of {{ report.name }}">
+                                <div class="image-overlay">
+                                    <button class="view-image-btn" onclick="viewImage('{{ url_for('static', filename='uploads/' + report.image) }}', '{{ report.name }}')">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="report-image placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            {% endif %}
+
+                            <div class="report-content">
+                                <div class="report-header">
+                                    <h4 class="report-name">{{ report.name }}</h4>
+                                    <span class="report-status status-{{ report.status }}">{{ report.status.title() }}</span>
+                                </div>
+
+                                <div class="report-details">
+                                    <div class="detail-item">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                        </svg>
+                                        <span>Age: {{ report.age }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                                        </svg>
+                                        <span>{{ report.gender }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                        <span>{{ report.area }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                        <span>{{ report.created_at.strftime('%B %d, %Y') }}</span>
+                                    </div>
+                                </div>
+
+                                <p class="report-description">{{ report.description[:150] }}{% if report.description|length > 150 %}...{% endif %}</p>
+
+                                <div class="report-actions">
+                                    <button class="btn-view" onclick="viewReport({{ report.id }})">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                        View Details
+                                    </button>
+                                    <button class="btn-share" onclick="shareReport({{ report.id }})">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="18" cy="5" r="3"></circle>
+                                            <circle cx="6" cy="12" r="3"></circle>
+                                            <circle cx="18" cy="19" r="3"></circle>
+                                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                        </svg>
+                                        Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-results">
+                        <div class="no-results-icon">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <h3>No Reports Found</h3>
+                        <p>Try adjusting your search criteria or clearing filters to see more results.</p>
+                        <button type="button" class="btn-primary" onclick="clearAllFilters()">Clear All Filters</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Styling -->
+<style>
+/* Filter Hero Section */
+.filter-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-theme .filter-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.filter-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+}
+
+.filter-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.filter-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.filter-hero .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.filter-hero .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.filter-hero .hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Filter Section */
+.filter-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .filter-section {
+    background: var(--bg-secondary);
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.filter-title-group .filter-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.filter-title-group .filter-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.filter-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Premium Filter Container */
+.premium-filter-container {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+/* Premium filter container dark theme support */
+.dark-theme .premium-filter-container {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.filter-row {
+    margin-bottom: 2rem;
+}
+
+.filter-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Primary Search */
+.primary-search .search-group {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    z-index: 2;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.dark-theme .search-input {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.dark-theme .search-input:focus {
+    background: var(--bg-primary);
+    border-color: var(--primary-color);
+}
+
+.clear-search {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.clear-search:hover {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.search-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px var(--primary-color-alpha);
+}
+
+/* Advanced Filters */
+.advanced-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.filter-group {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.filter-group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 1rem;
+}
+
+.filter-controls {
+    display: grid;
+    gap: 1rem;
+}
+
+.filter-control label {
+    display: block;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.premium-select,
+.premium-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.premium-select:focus,
+.premium-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.dark-theme .premium-select,
+.dark-theme .premium-input {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.dark-theme .premium-select:focus,
+.dark-theme .premium-input:focus {
+    border-color: var(--primary-color);
+}
+
+/* Filter Actions */
+.filter-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-secondary,
+.btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Results Section */
+.results-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.results-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.results-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.results-count {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.view-toggle {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 0.25rem;
+}
+
+.view-btn {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #64748b;
+}
+
+.view-btn.active,
+.view-btn:hover {
+    background: white;
+    color: #667eea;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Premium Report Cards */
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.premium-report-card {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.dark-theme .premium-report-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.premium-report-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.report-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.report-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.report-image.placeholder {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.report-image:hover .image-overlay {
+    opacity: 1;
+}
+
+.view-image-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-image-btn:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+.report-content {
+    padding: 1.5rem;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.report-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.report-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-found {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-closed {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.report-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.detail-item svg {
+    color: #94a3b8;
+}
+
+.report-description {
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.report-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-view,
+.btn-share {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+}
+
+.btn-view {
+    background: #667eea;
+    color: white;
+}
+
+.btn-view:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.btn-share {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.btn-share:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+/* No Results */
+.no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+}
+
+.no-results-icon {
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.no-results h3 {
+    font-size: 1.5rem;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.no-results p {
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .filter-hero .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .filter-hero .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .filter-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-stats {
+        align-self: stretch;
+        justify-content: space-around;
+    }
+
+    .primary-search .search-group {
+        flex-direction: column;
+    }
+
+    .advanced-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-actions {
+        flex-direction: column;
+    }
+
+    .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-details {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class AdvancedFilterSystem {
+    constructor() {
+        this.form = document.getElementById('filterForm');
+        this.searchInput = document.getElementById('searchInput');
+        this.clearSearchBtn = document.getElementById('clearSearch');
+        this.clearFiltersBtn = document.getElementById('clearFilters');
+        this.viewBtns = document.querySelectorAll('.view-btn');
+        this.reportsGrid = document.getElementById('reportsGrid');
+        this.resultsCount = document.getElementById('resultsCount');
+        this.filteredCount = document.getElementById('filteredCount');
+
+        this.initializeEventListeners();
+        this.initializeViewToggle();
+        this.updateClearSearchVisibility();
+    }
+
+    initializeEventListeners() {
+        // Search input events
+        if (this.searchInput) {
+            this.searchInput.addEventListener('input', () => {
+                this.updateClearSearchVisibility();
+            });
+
+            this.searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.form.submit();
+                }
+            });
+        }
+
+        // Clear search button
+        if (this.clearSearchBtn) {
+            this.clearSearchBtn.addEventListener('click', () => {
+                this.searchInput.value = '';
+                this.updateClearSearchVisibility();
+                this.searchInput.focus();
+            });
+        }
+
+        // Clear all filters button
+        if (this.clearFiltersBtn) {
+            this.clearFiltersBtn.addEventListener('click', () => {
+                this.clearAllFilters();
+            });
+        }
+
+        // Form submission with loading state
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => {
+                this.showLoadingState();
+            });
+        }
+
+        // Auto-submit on filter changes
+        const filterInputs = this.form.querySelectorAll('select, input[type="text"]');
+        filterInputs.forEach(input => {
+            if (input !== this.searchInput) {
+                input.addEventListener('change', () => {
+                    // Debounce auto-submit for text inputs
+                    if (input.type === 'text') {
+                        clearTimeout(this.autoSubmitTimeout);
+                        this.autoSubmitTimeout = setTimeout(() => {
+                            this.form.submit();
+                        }, 1000);
+                    } else {
+                        this.form.submit();
+                    }
+                });
+            }
+        });
+    }
+
+    initializeViewToggle() {
+        this.viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const view = btn.dataset.view;
+                this.switchView(view);
+
+                // Update active state
+                this.viewBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    }
+
+    switchView(view) {
+        if (!this.reportsGrid) return;
+
+        if (view === 'list') {
+            this.reportsGrid.style.gridTemplateColumns = '1fr';
+            this.reportsGrid.querySelectorAll('.premium-report-card').forEach(card => {
+                card.style.display = 'flex';
+                card.style.alignItems = 'center';
+
+                const image = card.querySelector('.report-image');
+                const content = card.querySelector('.report-content');
+
+                if (image) {
+                    image.style.width = '120px';
+                    image.style.height = '120px';
+                    image.style.flexShrink = '0';
+                }
+
+                if (content) {
+                    content.style.flex = '1';
+                }
+            });
+        } else {
+            this.reportsGrid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(350px, 1fr))';
+            this.reportsGrid.querySelectorAll('.premium-report-card').forEach(card => {
+                card.style.display = 'block';
+
+                const image = card.querySelector('.report-image');
+                const content = card.querySelector('.report-content');
+
+                if (image) {
+                    image.style.width = '100%';
+                    image.style.height = '200px';
+                }
+
+                if (content) {
+                    content.style.flex = 'none';
+                }
+            });
+        }
+    }
+
+    updateClearSearchVisibility() {
+        if (this.searchInput && this.clearSearchBtn) {
+            const hasValue = this.searchInput.value.trim().length > 0;
+            this.clearSearchBtn.style.display = hasValue ? 'block' : 'none';
+        }
+    }
+
+    clearAllFilters() {
+        // Clear all form inputs
+        const inputs = this.form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'search') {
+                input.value = '';
+            } else if (input.tagName === 'SELECT') {
+                input.selectedIndex = 0;
+            }
+        });
+
+        this.updateClearSearchVisibility();
+
+        // Submit form to show all results
+        this.form.submit();
+    }
+
+    showLoadingState() {
+        const submitBtn = this.form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin">
+                    <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                </svg>
+                Searching...
+            `;
+            submitBtn.disabled = true;
+
+            // Re-enable after a delay (in case of errors)
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 5000);
+        }
+    }
+}
+
+// Global functions for report actions
+function viewReport(reportId) {
+    // Create a modal or redirect to report details
+    window.location.href = `/report/${reportId}`;
+}
+
+function shareReport(reportId) {
+    const url = `${window.location.origin}/report/${reportId}`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Missing Person Report',
+            text: 'Help us find this missing person',
+            url: url
+        }).catch(console.error);
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            showNotification('Report link copied to clipboard!', 'success');
+        }).catch(() => {
+            // Fallback: show URL in prompt
+            prompt('Copy this link to share:', url);
+        });
+    }
+}
+
+function viewImage(imageSrc, personName) {
+    // Create image modal
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeImageModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeImageModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <img src="${imageSrc}" alt="Photo of ${personName}">
+                <p class="modal-caption">Photo of ${personName}</p>
+            </div>
+        </div>
+    `;
+
+    // Add modal styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .modal-caption {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 500;
+            color: #374151;
+            margin: 0;
+        }
+    `;
+
+    document.head.appendChild(style);
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.querySelector('.image-modal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+function clearAllFilters() {
+    if (window.filterSystem) {
+        window.filterSystem.clearAllFilters();
+    }
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+
+    document.body.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+
+    // Remove after delay
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Theme support functions
+function updateTheme() {
+    updateFilterTheme();
+}
+
+function updateFilterTheme() {
+    const isDark = document.body.classList.contains('dark-theme');
+    const filterContainer = document.querySelector('.premium-filter-container');
+    const reportCards = document.querySelectorAll('.premium-report-card');
+    const filterHero = document.querySelector('.filter-hero');
+    const filterGroups = document.querySelectorAll('.filter-group');
+    const premiumSelects = document.querySelectorAll('.premium-select');
+    const premiumInputs = document.querySelectorAll('.premium-input');
+
+    if (isDark) {
+        filterContainer?.classList.add('dark-theme');
+        reportCards.forEach(card => card.classList.add('dark-theme'));
+        filterHero?.classList.add('dark-theme');
+        filterGroups.forEach(group => group.classList.add('dark-theme'));
+        premiumSelects.forEach(select => select.classList.add('dark-theme'));
+        premiumInputs.forEach(input => input.classList.add('dark-theme'));
+    } else {
+        filterContainer?.classList.remove('dark-theme');
+        reportCards.forEach(card => card.classList.remove('dark-theme'));
+        filterHero?.classList.remove('dark-theme');
+        filterGroups.forEach(group => group.classList.remove('dark-theme'));
+        premiumSelects.forEach(select => select.classList.remove('dark-theme'));
+        premiumInputs.forEach(input => input.classList.remove('dark-theme'));
+    }
+}
+
+// Initialize the filter system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.filterSystem = new AdvancedFilterSystem();
+
+    // Initialize theme support
+    updateFilterTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                updateFilterTheme();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initialize AOS animations if available
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+    }
+});
+
+// Add CSS animation for loading spinner
+const spinnerStyle = document.createElement('style');
+spinnerStyle.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+`;
+document.head.appendChild(spinnerStyle);
+</script>
+
+{% endblock %}
+ 

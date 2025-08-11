@@ -1,0 +1,1163 @@
+{% extends "base.html" %}
+{% block title %}Feedback & Suggestions - Rescue{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section feedback-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Your Voice Matters</span>
+            </div>
+            <h1 class="hero-title">Share Your Feedback</h1>
+            <p class="hero-subtitle">Help us improve our missing person rescue system with your valuable insights and suggestions</p>
+        </div>
+    </div>
+</section>
+
+<!-- Feedback Form Section -->
+<section class="feedback-section">
+    <div class="container">
+        <div class="feedback-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="feedback-header">
+                <h2 class="feedback-title">We Value Your Input</h2>
+                <p class="feedback-subtitle">Your feedback helps us save more lives and improve our services</p>
+            </div>
+
+            <div class="feedback-form-container">
+                <form method="POST" class="premium-feedback-form" id="feedbackForm" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <!-- Feedback Type Selection -->
+                    <div class="feedback-type-section">
+                        <h3 class="section-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                            </svg>
+                            Feedback Type
+                        </h3>
+                        <div class="feedback-types">
+                            <label class="feedback-type-card active" data-type="suggestion">
+                                <input type="radio" name="feedback_type" value="suggestion" checked>
+                                <div class="type-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                </div>
+                                <div class="type-content">
+                                    <h4>Suggestion</h4>
+                                    <p>Ideas for improvement</p>
+                                </div>
+                            </label>
+                            <label class="feedback-type-card" data-type="bug">
+                                <input type="radio" name="feedback_type" value="bug">
+                                <div class="type-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M8 2v4l-2 2-2-2V2"></path>
+                                        <path d="M16 2v4l2 2 2-2V2"></path>
+                                        <path d="M8 10h8v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V10z"></path>
+                                    </svg>
+                                </div>
+                                <div class="type-content">
+                                    <h4>Bug Report</h4>
+                                    <p>Something isn't working</p>
+                                </div>
+                            </label>
+                            <label class="feedback-type-card" data-type="compliment">
+                                <input type="radio" name="feedback_type" value="compliment">
+                                <div class="type-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </div>
+                                <div class="type-content">
+                                    <h4>Compliment</h4>
+                                    <p>Share positive feedback</p>
+                                </div>
+                            </label>
+                            <label class="feedback-type-card" data-type="other">
+                                <input type="radio" name="feedback_type" value="other">
+                                <div class="type-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                    </svg>
+                                </div>
+                                <div class="type-content">
+                                    <h4>Other</h4>
+                                    <p>General feedback</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Subject Field -->
+                    <div class="form-group premium-input">
+                        <label for="subject" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            Subject *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.subject(class="form-control premium-control", placeholder="Brief description of your feedback", required=true, id="subject") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        {% if form.subject.errors %}
+                        <div class="validation-message error">
+                            {% for error in form.subject.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Keep it concise and descriptive
+                        </small>
+                    </div>
+
+                    <!-- Message Field -->
+                    <div class="form-group premium-input full-width">
+                        <label for="message" class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Your Message *
+                        </label>
+                        <div class="input-wrapper">
+                            {{ form.message(class="form-control premium-control premium-textarea", placeholder="Share your detailed feedback, suggestions, or concerns...", rows="8", required=true, id="message") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                        <div class="char-counter">
+                            <span id="char-count">0</span> / 1000 characters
+                            <div class="counter-bar">
+                                <div class="counter-fill" id="counterFill"></div>
+                            </div>
+                        </div>
+                        {% if form.message.errors %}
+                        <div class="validation-message error">
+                            {% for error in form.message.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <small class="form-hint">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Be specific and provide as much detail as possible
+                        </small>
+                    </div>
+
+                    <!-- Priority Level -->
+                    <div class="form-group premium-input">
+                        <label class="form-label">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Priority Level
+                        </label>
+                        <div class="priority-selector">
+                            <label class="priority-option low active">
+                                <input type="radio" name="priority" value="low" checked>
+                                <span class="priority-indicator"></span>
+                                <span class="priority-text">Low</span>
+                            </label>
+                            <label class="priority-option medium">
+                                <input type="radio" name="priority" value="medium">
+                                <span class="priority-indicator"></span>
+                                <span class="priority-text">Medium</span>
+                            </label>
+                            <label class="priority-option high">
+                                <input type="radio" name="priority" value="high">
+                                <span class="priority-indicator"></span>
+                                <span class="priority-text">High</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="window.history.back()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 12H5m7-7l-7 7 7 7"></path>
+                            </svg>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            <span class="submit-text">Send Feedback</span>
+                            <span class="submit-loading" style="display: none;">
+                                <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                                </svg>
+                                Sending...
+                            </span>
+                            <svg class="submit-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info-section" data-aos="fade-up" data-aos-delay="400">
+            <div class="contact-info-card">
+                <div class="contact-header">
+                    <h3>Other Ways to Reach Us</h3>
+                    <p>Choose the method that works best for you</p>
+                </div>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22 6 12 13 2 6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="method-content">
+                            <h4>Email Support</h4>
+                            <p>feedback@rescue.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <div class="method-content">
+                            <h4>Phone Support</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="method-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </div>
+                        <div class="method-content">
+                            <h4>Response Time</h4>
+                            <p>Within 24 hours</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Styling -->
+<style>
+/* Feedback Hero Section */
+.feedback-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-theme .feedback-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.feedback-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="300" cy="200" r="100" fill="url(%23a)"/><circle cx="700" cy="400" r="150" fill="url(%23a)"/><circle cx="200" cy="700" r="120" fill="url(%23a)"/></svg>');
+}
+
+.feedback-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.feedback-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.feedback-hero .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.feedback-hero .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.feedback-hero .hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Feedback Section */
+.feedback-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .feedback-section {
+    background: var(--bg-secondary);
+}
+
+.feedback-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.feedback-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.feedback-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.feedback-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.feedback-form-container {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.dark-theme .feedback-form-container {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Feedback Type Selection */
+.feedback-type-section {
+    margin-bottom: 2.5rem;
+}
+
+.feedback-type-section .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.feedback-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.feedback-type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--bg-secondary);
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.feedback-type-card:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+    transform: translateY(-2px);
+}
+
+.feedback-type-card.active {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.dark-theme .feedback-type-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark-theme .feedback-type-card:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.feedback-type-card input[type="radio"] {
+    display: none;
+}
+
+.type-icon {
+    margin-bottom: 1rem;
+}
+
+.type-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.type-content p {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* Premium Form Inputs */
+.premium-input {
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.premium-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.premium-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+/* Form elements theme support for dark mode */
+.dark-theme .premium-control {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark-theme .premium-control:focus {
+    background: var(--bg-primary);
+    border-color: var(--primary-color);
+}
+
+.premium-textarea {
+    min-height: 120px;
+    font-family: inherit;
+    line-height: 1.6;
+}
+
+.input-focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.premium-control:focus + .input-focus-border {
+    transform: scaleX(1);
+}
+
+.char-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.counter-bar {
+    flex: 1;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    margin-left: 1rem;
+    overflow: hidden;
+}
+
+.counter-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.form-hint {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+}
+
+.validation-message {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.validation-message.error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+/* Priority Selector */
+.priority-selector {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.priority-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.priority-option:hover {
+    border-color: #d1d5db;
+    background: #f1f5f9;
+}
+
+.priority-option.active {
+    border-color: #667eea;
+    background: #f0f4ff;
+}
+
+.priority-option input[type="radio"] {
+    display: none;
+}
+
+.priority-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.priority-option.low.active .priority-indicator {
+    background: #10b981;
+    border-color: #10b981;
+}
+
+.priority-option.medium.active .priority-indicator {
+    background: #f59e0b;
+    border-color: #f59e0b;
+}
+
+.priority-option.high.active .priority-indicator {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.priority-text {
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-secondary,
+.btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Contact Info Section */
+.contact-info-section {
+    margin-top: 3rem;
+}
+
+.contact-info-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.contact-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.contact-header p {
+    color: #64748b;
+}
+
+.contact-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.contact-method {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.method-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.method-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.method-content p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .feedback-hero .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .feedback-hero .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .feedback-form-container {
+        padding: 2rem;
+    }
+
+    .feedback-types {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .priority-selector {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .contact-methods {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class PremiumFeedbackSystem {
+    constructor() {
+        this.form = document.getElementById('feedbackForm');
+        this.messageField = document.getElementById('message');
+        this.charCount = document.getElementById('char-count');
+        this.counterFill = document.getElementById('counterFill');
+        this.submitBtn = document.getElementById('submitBtn');
+
+        this.initializeEventListeners();
+        this.initializeFeedbackTypes();
+        this.initializePrioritySelector();
+        this.updateCharCounter();
+    }
+
+    initializeEventListeners() {
+        // Character counter for message field
+        if (this.messageField) {
+            this.messageField.addEventListener('input', () => {
+                this.updateCharCounter();
+            });
+        }
+
+        // Form submission
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => {
+                this.handleFormSubmission(e);
+            });
+        }
+
+        // Real-time validation
+        const inputs = this.form.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => {
+                this.validateField(input);
+            });
+
+            input.addEventListener('input', () => {
+                this.clearValidationError(input);
+            });
+        });
+    }
+
+    initializeFeedbackTypes() {
+        const typeCards = document.querySelectorAll('.feedback-type-card');
+        typeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active class from all cards
+                typeCards.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked card
+                card.classList.add('active');
+
+                // Check the radio button
+                const radio = card.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+
+                // Update form based on type
+                this.updateFormForType(card.dataset.type);
+            });
+        });
+    }
+
+    initializePrioritySelector() {
+        const priorityOptions = document.querySelectorAll('.priority-option');
+        priorityOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove active class from all options
+                priorityOptions.forEach(o => o.classList.remove('active'));
+
+                // Add active class to clicked option
+                option.classList.add('active');
+
+                // Check the radio button
+                const radio = option.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+            });
+        });
+    }
+
+    updateCharCounter() {
+        if (!this.messageField || !this.charCount || !this.counterFill) return;
+
+        const currentLength = this.messageField.value.length;
+        const maxLength = 1000;
+        const percentage = (currentLength / maxLength) * 100;
+
+        this.charCount.textContent = currentLength;
+        this.counterFill.style.width = `${Math.min(percentage, 100)}%`;
+
+        // Change color based on usage
+        if (percentage > 90) {
+            this.counterFill.style.background = '#dc2626';
+        } else if (percentage > 70) {
+            this.counterFill.style.background = '#f59e0b';
+        } else {
+            this.counterFill.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }
+    }
+
+    updateFormForType(type) {
+        const subjectField = document.getElementById('subject');
+        if (!subjectField) return;
+
+        const placeholders = {
+            suggestion: 'Suggestion for improving the rescue system',
+            bug: 'Bug report: Brief description of the issue',
+            compliment: 'What did we do well?',
+            other: 'Brief description of your feedback'
+        };
+
+        subjectField.placeholder = placeholders[type] || placeholders.other;
+    }
+
+    validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+
+        if (field.hasAttribute('required') && !value) {
+            isValid = false;
+            errorMessage = 'This field is required';
+        } else if (field.type === 'email' && value && !this.isValidEmail(value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid email address';
+        } else if (field.id === 'message' && value.length > 1000) {
+            isValid = false;
+            errorMessage = 'Message must be 1000 characters or less';
+        }
+
+        this.showValidationResult(field, isValid, errorMessage);
+        return isValid;
+    }
+
+    showValidationResult(field, isValid, errorMessage) {
+        const wrapper = field.closest('.premium-input');
+        if (!wrapper) return;
+
+        // Remove existing validation messages
+        const existingMessage = wrapper.querySelector('.validation-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+
+        if (!isValid && errorMessage) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'validation-message error';
+            messageEl.textContent = errorMessage;
+
+            const inputWrapper = wrapper.querySelector('.input-wrapper');
+            if (inputWrapper) {
+                inputWrapper.after(messageEl);
+            } else {
+                field.after(messageEl);
+            }
+
+            field.style.borderColor = '#dc2626';
+        } else {
+            field.style.borderColor = '';
+        }
+    }
+
+    clearValidationError(field) {
+        const wrapper = field.closest('.premium-input');
+        if (!wrapper) return;
+
+        const errorMessage = wrapper.querySelector('.validation-message.error');
+        if (errorMessage) {
+            errorMessage.remove();
+        }
+
+        field.style.borderColor = '';
+    }
+
+    handleFormSubmission(e) {
+        e.preventDefault();
+
+        // Validate all fields
+        const inputs = this.form.querySelectorAll('input[required], textarea[required]');
+        let isFormValid = true;
+
+        inputs.forEach(input => {
+            if (!this.validateField(input)) {
+                isFormValid = false;
+            }
+        });
+
+        if (!isFormValid) {
+            this.showNotification('Please fix the errors before submitting', 'error');
+            return;
+        }
+
+        // Show loading state
+        this.setSubmitButtonLoading(true);
+
+        // Simulate form submission (replace with actual submission)
+        setTimeout(() => {
+            this.setSubmitButtonLoading(false);
+            this.showNotification('Thank you for your feedback! We\'ll review it shortly.', 'success');
+
+            // Reset form after successful submission
+            setTimeout(() => {
+                this.form.reset();
+                this.updateCharCounter();
+                this.resetFormState();
+            }, 2000);
+        }, 2000);
+    }
+
+    setSubmitButtonLoading(loading) {
+        if (!this.submitBtn) return;
+
+        const submitText = this.submitBtn.querySelector('.submit-text');
+        const submitLoading = this.submitBtn.querySelector('.submit-loading');
+        const submitIcon = this.submitBtn.querySelector('.submit-icon');
+
+        if (loading) {
+            submitText.style.display = 'none';
+            submitIcon.style.display = 'none';
+            submitLoading.style.display = 'flex';
+            this.submitBtn.disabled = true;
+        } else {
+            submitText.style.display = 'block';
+            submitIcon.style.display = 'block';
+            submitLoading.style.display = 'none';
+            this.submitBtn.disabled = false;
+        }
+    }
+
+    resetFormState() {
+        // Reset feedback type to first option
+        const firstTypeCard = document.querySelector('.feedback-type-card');
+        if (firstTypeCard) {
+            document.querySelectorAll('.feedback-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            firstTypeCard.classList.add('active');
+            firstTypeCard.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // Reset priority to low
+        const firstPriorityOption = document.querySelector('.priority-option.low');
+        if (firstPriorityOption) {
+            document.querySelectorAll('.priority-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            firstPriorityOption.classList.add('active');
+            firstPriorityOption.querySelector('input[type="radio"]').checked = true;
+        }
+    }
+
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `feedback-notification feedback-${type}`;
+        notification.textContent = message;
+
+        const colors = {
+            success: '#10b981',
+            error: '#dc2626',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: ${colors[type] || colors.info};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+            font-weight: 500;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 5000);
+    }
+}
+
+// Theme support functions
+function updateTheme() {
+    updateFeedbackTheme();
+}
+
+function updateFeedbackTheme() {
+    const isDark = document.body.classList.contains('dark-theme');
+    const formContainer = document.querySelector('.feedback-form-container');
+    const typeCards = document.querySelectorAll('.feedback-type-card');
+
+    if (isDark) {
+        formContainer?.classList.add('dark-theme');
+        typeCards.forEach(card => card.classList.add('dark-theme'));
+    } else {
+        formContainer?.classList.remove('dark-theme');
+        typeCards.forEach(card => card.classList.remove('dark-theme'));
+    }
+}
+
+// Initialize the feedback system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.feedbackSystem = new PremiumFeedbackSystem();
+
+    // Initialize theme support
+    updateFeedbackTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                updateFeedbackTheme();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initialize AOS animations if available
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+    }
+});
+</script>
+
+{% endblock %}

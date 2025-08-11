@@ -1,0 +1,1572 @@
+{% extends "base.html" %}
+{% block title %}Emergency Alerts & Notifications - Rescue{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section alert-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+        <div class="alert-animation">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring delay-1"></div>
+            <div class="pulse-ring delay-2"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-badge urgent">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Emergency Alerts</span>
+            </div>
+            <h1 class="hero-title">Missing Person Alerts</h1>
+            <p class="hero-subtitle">Real-time notifications and urgent missing person reports requiring immediate attention</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="activeAlerts">{{ alerts|length if alerts else 0 }}</span>
+                    <span class="stat-label">Active Alerts</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="urgentAlerts">{{ urgent_count if urgent_count else 0 }}</span>
+                    <span class="stat-label">Urgent Cases</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="recentAlerts">{{ recent_count if recent_count else 0 }}</span>
+                    <span class="stat-label">Last 24h</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Alert Controls Section -->
+<section class="alert-controls-section">
+    <div class="container">
+        <div class="alert-controls" data-aos="fade-up">
+            <div class="control-group">
+                <h3 class="control-title">Alert Settings</h3>
+                <div class="control-buttons">
+                    <button class="control-btn active" data-filter="all">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        All Alerts
+                    </button>
+                    <button class="control-btn" data-filter="urgent">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Urgent Only
+                    </button>
+                    <button class="control-btn" data-filter="recent">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Recent
+                    </button>
+                    <button class="control-btn" data-filter="nearby">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Nearby
+                    </button>
+                </div>
+            </div>
+            <div class="notification-settings">
+                <button class="notification-btn" id="enableNotifications">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    Enable Notifications
+                </button>
+                <button class="refresh-btn" id="refreshAlerts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Alerts Display Section -->
+<section class="premium-alerts-section">
+    <div class="container">
+        {% if alerts %}
+            <div class="alerts-grid" id="alertsGrid" data-aos="fade-up" data-aos-delay="200">
+                {% for alert in alerts %}
+                <div class="premium-alert-card {{ 'urgent' if loop.index <= 3 else 'normal' }}" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}" data-alert-type="{{ 'urgent' if loop.index <= 3 else 'normal' }}" data-alert-date="{{ alert.created_at.isoformat() if alert.created_at else '' }}">
+                    <!-- Alert Priority Indicator -->
+                    <div class="alert-priority {{ 'urgent' if loop.index <= 3 else 'normal' }}">
+                        {% if loop.index <= 3 %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>URGENT</span>
+                        {% else %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <span>ACTIVE</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Alert Image -->
+                    <div class="alert-image-container">
+                        {% if alert.image %}
+                        <div class="alert-image">
+                            <img src="{{ url_for('static', filename='uploads/' + alert.image) }}" alt="Photo of {{ alert.name }}">
+                            <div class="image-overlay">
+                                <button class="view-image-btn" onclick="viewAlertImage('{{ url_for('static', filename='uploads/' + alert.image) }}', '{{ alert.name }}')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert-image placeholder">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <span>No Photo Available</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Alert Content -->
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h3 class="alert-name">{{ alert.name }}</h3>
+                            <div class="alert-time">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span class="time-ago" data-time="{{ alert.created_at.isoformat() if alert.created_at else '' }}">
+                                    {{ alert.created_at.strftime('%B %d, %Y at %I:%M %p') if alert.created_at else 'Unknown' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="alert-details">
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <span class="detail-label">Age:</span>
+                                    <span class="detail-value">{{ alert.age }} years old</span>
+                                </div>
+                                <div class="detail-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                        <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                                    </svg>
+                                    <span class="detail-label">Gender:</span>
+                                    <span class="detail-value">{{ alert.gender }}</span>
+                                </div>
+                                <div class="detail-item full-width">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <span class="detail-label">Last Seen:</span>
+                                    <span class="detail-value">{{ alert.area }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-description">
+                            <p>{{ alert.description[:200] }}{% if alert.description|length > 200 %}...{% endif %}</p>
+                        </div>
+
+                        <div class="alert-actions">
+                            <button class="action-btn primary" onclick="viewAlertDetails({{ alert.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                View Details
+                            </button>
+                            <button class="action-btn secondary" onclick="shareAlert({{ alert.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                Share Alert
+                            </button>
+                            <button class="action-btn emergency" onclick="reportSighting({{ alert.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                                Report Sighting
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-alerts" data-aos="fade-up">
+                <div class="no-alerts-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        <line x1="18" y1="8" x2="6" y2="8"></line>
+                    </svg>
+                </div>
+                <h3>No Active Alerts</h3>
+                <p>There are currently no missing person alerts in your area. We'll notify you immediately when new alerts are issued.</p>
+                <div class="no-alerts-actions">
+                    <button class="btn-primary" onclick="enableNotifications()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        Enable Notifications
+                    </button>
+                    <button class="btn-secondary" onclick="window.location.href='{{ url_for('main.report') }}'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="16"></line>
+                            <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                        Report Missing Person
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Emergency Contact Section -->
+<section class="emergency-contact-section">
+    <div class="container">
+        <div class="emergency-contact-card" data-aos="fade-up">
+            <div class="emergency-header">
+                <div class="emergency-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                </div>
+                <div class="emergency-content">
+                    <h3>Emergency Contacts</h3>
+                    <p>If you have information about any missing person or need immediate assistance</p>
+                </div>
+            </div>
+            <div class="emergency-actions">
+                <a href="tel:15" class="emergency-btn urgent">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Emergency: 15
+                </a>
+                <a href="tel:1122" class="emergency-btn police">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Police: 1122
+                </a>
+                <button class="emergency-btn info" onclick="showEmergencyInfo()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    More Info
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Styling -->
+<style>
+/* Alert Hero Section */
+.alert-hero {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+.dark-theme .alert-hero {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+}
+
+/* Alert hero overlay for better text contrast in dark mode */
+.alert-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    transition: background 0.3s ease;
+}
+
+.dark-theme .alert-hero .hero-overlay {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.alert-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.alert-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.alert-animation {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    width: 200px;
+    height: 200px;
+}
+
+.pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.pulse-ring.delay-1 {
+    animation-delay: 0.5s;
+    width: 80px;
+    height: 80px;
+}
+
+.pulse-ring.delay-2 {
+    animation-delay: 1s;
+    width: 100px;
+    height: 100px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+.alert-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.alert-hero .hero-badge.urgent {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    animation: urgentPulse 2s infinite;
+    transition: all 0.3s ease;
+}
+
+.dark-theme .alert-hero .hero-badge.urgent {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+}
+
+@keyframes urgentPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+}
+
+.alert-hero .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.alert-hero .hero-subtitle {
+    font-size: 1.4rem;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    min-width: 120px;
+    transition: all 0.3s ease;
+}
+
+.dark-theme .stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Alert Controls Section */
+.alert-controls-section {
+    padding: 2rem 0;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dark-theme .alert-controls-section {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.alert-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.control-group .control-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover,
+.control-btn.active {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+    background: var(--danger-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--danger-color-alpha);
+}
+
+.dark-theme .control-btn {
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.dark-theme .control-btn:hover,
+.dark-theme .control-btn.active {
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+    background: var(--danger-light);
+}
+
+.notification-settings {
+    display: flex;
+    gap: 1rem;
+}
+
+.notification-btn,
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.notification-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.notification-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.refresh-btn {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.refresh-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+/* Premium Alerts Section */
+.premium-alerts-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .premium-alerts-section {
+    background: var(--bg-secondary);
+}
+
+.alerts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.premium-alert-card {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.dark-theme .premium-alert-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.premium-alert-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.premium-alert-card.urgent {
+    border-left: 6px solid #dc2626;
+    animation: urgentGlow 3s infinite;
+}
+
+@keyframes urgentGlow {
+    0%, 100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3); }
+}
+
+.alert-priority {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.alert-priority.urgent {
+    background: #dc2626;
+    color: white;
+    animation: priorityPulse 2s infinite;
+}
+
+.alert-priority.normal {
+    background: #10b981;
+    color: white;
+}
+
+@keyframes priorityPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.alert-image-container {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.alert-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.alert-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.alert-image.placeholder {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.alert-image.placeholder span {
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.alert-image:hover .image-overlay {
+    opacity: 1;
+}
+
+.view-image-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #374151;
+}
+
+.view-image-btn:hover {
+    background: white;
+    transform: scale(1.1);
+}
+
+.alert-content {
+    padding: 2rem;
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.alert-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+}
+
+.alert-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.alert-details {
+    margin-bottom: 1.5rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-item svg {
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.detail-label {
+    font-weight: 500;
+    color: #64748b;
+}
+
+.detail-value {
+    color: #374151;
+    font-weight: 600;
+}
+
+.alert-description {
+    margin-bottom: 2rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+.alert-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: none;
+    text-decoration: none;
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.action-btn.secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.action-btn.secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.action-btn.emergency {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: white;
+}
+
+.action-btn.emergency:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
+}
+
+/* No Alerts Section */
+.no-alerts {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+}
+
+.no-alerts-icon {
+    margin-bottom: 2rem;
+    opacity: 0.5;
+}
+
+.no-alerts h3 {
+    font-size: 2rem;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+
+.no-alerts p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.no-alerts-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+/* Emergency Contact Section */
+.emergency-contact-section {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+.emergency-contact-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    color: white;
+}
+
+.emergency-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.emergency-icon {
+    background: rgba(220, 38, 38, 0.2);
+    border-radius: 50%;
+    padding: 1rem;
+    color: #fca5a5;
+}
+
+.emergency-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.emergency-content p {
+    opacity: 0.8;
+    font-size: 1.1rem;
+}
+
+.emergency-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.emergency-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    text-decoration: none;
+    color: white;
+}
+
+.emergency-btn.urgent {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+.emergency-btn.urgent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+}
+
+.emergency-btn.police {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+.emergency-btn.police:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+}
+
+.emergency-btn.info {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.emergency-btn.info:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .alert-hero .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .alert-hero .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .alert-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-buttons {
+        justify-content: center;
+    }
+
+    .notification-settings {
+        justify-content: center;
+    }
+
+    .alerts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .alert-actions {
+        flex-direction: column;
+    }
+
+    .emergency-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .emergency-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class PremiumAlertSystem {
+    constructor() {
+        this.currentFilter = 'all';
+        this.alerts = [];
+        this.notificationsEnabled = false;
+
+        this.initializeEventListeners();
+        this.initializeNotifications();
+        this.startAutoRefresh();
+        this.updateTimeAgo();
+    }
+
+    initializeEventListeners() {
+        // Filter buttons
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.setActiveFilter(e.target.closest('.control-btn'));
+            });
+        });
+
+        // Notification button
+        const notificationBtn = document.getElementById('enableNotifications');
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', () => {
+                this.toggleNotifications();
+            });
+        }
+
+        // Refresh button
+        const refreshBtn = document.getElementById('refreshAlerts');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => {
+                this.refreshAlerts();
+            });
+        }
+    }
+
+    setActiveFilter(activeBtn) {
+        // Remove active class from all buttons
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Add active class to clicked button
+        activeBtn.classList.add('active');
+
+        // Get filter type
+        const filter = activeBtn.dataset.filter;
+        this.currentFilter = filter;
+
+        // Apply filter
+        this.applyFilter(filter);
+    }
+
+    applyFilter(filter) {
+        const alertCards = document.querySelectorAll('.premium-alert-card');
+        let visibleCount = 0;
+
+        alertCards.forEach(card => {
+            let shouldShow = true;
+
+            switch (filter) {
+                case 'urgent':
+                    shouldShow = card.classList.contains('urgent');
+                    break;
+                case 'recent':
+                    const alertDate = new Date(card.dataset.alertDate);
+                    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+                    shouldShow = alertDate > oneDayAgo;
+                    break;
+                case 'nearby':
+                    // Simulate nearby filter - in real app, this would use geolocation
+                    shouldShow = Math.random() > 0.5;
+                    break;
+                case 'all':
+                default:
+                    shouldShow = true;
+                    break;
+            }
+
+            if (shouldShow) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Update filtered count
+        const filteredCountEl = document.getElementById('activeAlerts');
+        if (filteredCountEl) {
+            filteredCountEl.textContent = visibleCount;
+        }
+
+        this.showFilterNotification(filter, visibleCount);
+    }
+
+    showFilterNotification(filter, count) {
+        const filterNames = {
+            'all': 'All Alerts',
+            'urgent': 'Urgent Alerts',
+            'recent': 'Recent Alerts',
+            'nearby': 'Nearby Alerts'
+        };
+
+        this.showNotification(`Showing ${count} ${filterNames[filter]}`, 'info');
+    }
+
+    async initializeNotifications() {
+        if ('Notification' in window) {
+            const permission = await Notification.requestPermission();
+            this.notificationsEnabled = permission === 'granted';
+            this.updateNotificationButton();
+        }
+    }
+
+    toggleNotifications() {
+        if (!('Notification' in window)) {
+            this.showNotification('Notifications not supported in this browser', 'error');
+            return;
+        }
+
+        if (this.notificationsEnabled) {
+            this.notificationsEnabled = false;
+            this.showNotification('Notifications disabled', 'info');
+        } else {
+            Notification.requestPermission().then(permission => {
+                this.notificationsEnabled = permission === 'granted';
+                if (this.notificationsEnabled) {
+                    this.showNotification('Notifications enabled', 'success');
+                    this.sendTestNotification();
+                } else {
+                    this.showNotification('Notification permission denied', 'error');
+                }
+                this.updateNotificationButton();
+            });
+        }
+    }
+
+    updateNotificationButton() {
+        const btn = document.getElementById('enableNotifications');
+        if (btn) {
+            if (this.notificationsEnabled) {
+                btn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    Notifications On
+                `;
+                btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+            } else {
+                btn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        <line x1="22" y1="2" x2="2" y2="22"></line>
+                    </svg>
+                    Enable Notifications
+                `;
+                btn.style.background = 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)';
+            }
+        }
+    }
+
+    sendTestNotification() {
+        if (this.notificationsEnabled) {
+            new Notification('Rescue Alert System', {
+                body: 'You will now receive notifications for new missing person alerts.',
+                icon: '/static/favicon.ico',
+                badge: '/static/favicon.ico'
+            });
+        }
+    }
+
+    refreshAlerts() {
+        const refreshBtn = document.getElementById('refreshAlerts');
+        if (refreshBtn) {
+            // Add spinning animation
+            const svg = refreshBtn.querySelector('svg');
+            svg.style.animation = 'spin 1s linear infinite';
+
+            // Simulate refresh delay
+            setTimeout(() => {
+                svg.style.animation = '';
+                this.showNotification('Alerts refreshed', 'success');
+
+                // In a real app, this would fetch new data from the server
+                window.location.reload();
+            }, 1500);
+        }
+    }
+
+    startAutoRefresh() {
+        // Auto-refresh every 5 minutes
+        setInterval(() => {
+            this.updateTimeAgo();
+            // In a real app, this would check for new alerts
+        }, 300000);
+    }
+
+    updateTimeAgo() {
+        document.querySelectorAll('.time-ago').forEach(el => {
+            const time = el.dataset.time;
+            if (time) {
+                const timeAgo = this.getTimeAgo(new Date(time));
+                el.textContent = timeAgo;
+            }
+        });
+    }
+
+    getTimeAgo(date) {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return 'Just now';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+        if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+
+        return date.toLocaleDateString();
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `alert-notification alert-${type}`;
+        notification.textContent = message;
+
+        const colors = {
+            success: '#10b981',
+            error: '#dc2626',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: ${colors[type] || colors.info};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            font-weight: 500;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 4000);
+    }
+}
+
+// Global functions for alert actions
+function viewAlertDetails(alertId) {
+    window.location.href = `/report/${alertId}`;
+}
+
+function shareAlert(alertId) {
+    const url = `${window.location.origin}/report/${alertId}`;
+    const title = 'Missing Person Alert';
+    const text = 'Help us find this missing person. Please share this alert.';
+
+    if (navigator.share) {
+        navigator.share({ title, text, url }).catch(console.error);
+    } else {
+        navigator.clipboard.writeText(url).then(() => {
+            window.alertSystem.showNotification('Alert link copied to clipboard!', 'success');
+        }).catch(() => {
+            prompt('Copy this link to share the alert:', url);
+        });
+    }
+}
+
+function reportSighting(alertId) {
+    const confirmed = confirm('Do you want to report a sighting of this missing person? This will redirect you to the emergency contact form.');
+    if (confirmed) {
+        window.location.href = `/contact?alert=${alertId}`;
+    }
+}
+
+function viewAlertImage(imageSrc, personName) {
+    const modal = document.createElement('div');
+    modal.className = 'image-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay" onclick="closeImageModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeImageModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <img src="${imageSrc}" alt="Photo of ${personName}">
+                <div class="modal-info">
+                    <h3>${personName}</h3>
+                    <p>Missing Person Alert Photo</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add modal styles
+    const style = document.createElement('style');
+    style.textContent = `
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            z-index: 2;
+        }
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        .modal-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .modal-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #1a202c;
+            font-size: 1.25rem;
+        }
+        .modal-info p {
+            margin: 0;
+            color: #64748b;
+        }
+    `;
+
+    document.head.appendChild(style);
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.querySelector('.image-modal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+}
+
+function enableNotifications() {
+    if (window.alertSystem) {
+        window.alertSystem.toggleNotifications();
+    }
+}
+
+function showEmergencyInfo() {
+    alert(`Emergency Contact Information:
+
+🚨 Emergency Services: 15
+👮 Police: 1122
+🏥 Medical Emergency: 1122
+
+If you have information about any missing person:
+1. Contact the authorities immediately
+2. Do not approach if you feel unsafe
+3. Note the exact location and time
+4. Provide as much detail as possible
+
+For non-emergency tips, use the contact form on our website.`);
+}
+
+// Add CSS animation for spinning
+const spinStyle = document.createElement('style');
+spinStyle.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(spinStyle);
+
+// Theme support functions
+function updateTheme() {
+    updateAlertTheme();
+}
+
+function updateAlertTheme() {
+    const isDark = document.body.classList.contains('dark-theme');
+    const alertCards = document.querySelectorAll('.premium-alert-card');
+    const controlBtns = document.querySelectorAll('.control-btn');
+    const alertHero = document.querySelector('.alert-hero');
+    const heroOverlay = document.querySelector('.alert-hero .hero-overlay');
+    const heroBadge = document.querySelector('.alert-hero .hero-badge');
+    const statCards = document.querySelectorAll('.stat-card');
+
+    if (isDark) {
+        alertCards.forEach(card => card.classList.add('dark-theme'));
+        controlBtns.forEach(btn => btn.classList.add('dark-theme'));
+        alertHero?.classList.add('dark-theme');
+        heroOverlay?.classList.add('dark-theme');
+        heroBadge?.classList.add('dark-theme');
+        statCards.forEach(card => card.classList.add('dark-theme'));
+    } else {
+        alertCards.forEach(card => card.classList.remove('dark-theme'));
+        controlBtns.forEach(btn => btn.classList.remove('dark-theme'));
+        alertHero?.classList.remove('dark-theme');
+        heroOverlay?.classList.remove('dark-theme');
+        heroBadge?.classList.remove('dark-theme');
+        statCards.forEach(card => card.classList.remove('dark-theme'));
+    }
+}
+
+// Initialize the alert system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.alertSystem = new PremiumAlertSystem();
+
+    // Initialize theme support
+    updateAlertTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                updateAlertTheme();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initialize AOS animations if available
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+    }
+});
+</script>
+
+{% endblock %}

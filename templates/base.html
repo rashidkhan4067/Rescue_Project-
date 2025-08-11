@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head_extra %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium-sections.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/premium-sections.css') }}">
+</head>
+<body>
+    <header class="modern-header">
+        <div class="header-container">
+            <div class="logo">
+                <a href="{{ url_for('main.index') }}" class="logo-link" data-translate="app_name">
+                    <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12" y2="17"></line>
+                    </svg>
+                    <span class="logo-text">Rescue</span>
+                </a>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="search-container">
+                <form action="{{ url_for('main.search') }}" method="GET" class="search-form">
+                    <input type="text" name="q" placeholder="Search missing persons reports..." class="search-input">
+                    <button type="submit" class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <button class="clear-search" aria-label="Clear search">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
+            <div class="theme-controls">
+                <button type="button" id="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon">🌓</span>
+                </button>
+                <div class="color-picker">
+                    <input type="color" id="primary-color" value="#2563eb">
+                </div>
+                <div class="language-selector">
+                    <select id="language-select">
+                        <option value="en">English</option>
+                        <option value="ur">اردو</option>
+                        <option value="skr">سرائیکی</option>
+                        <option value="sd">سنڌي</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                    </select>
+                </div>
+                <div class="province-selector">
+                    <select id="province-select">
+                        <option value="all">All Pakistan</option>
+                        <option value="punjab">Punjab</option>
+                        <option value="sindh">Sindh</option>
+                        <option value="kpk">Khyber Pakhtunkhwa</option>
+                        <option value="balochistan">Balochistan</option>
+                        <option value="gb">Gilgit-Baltistan</option>
+                        <option value="ajk">Azad Jammu & Kashmir</option>
+                    </select>
+                </div>
+            </div>
+            <nav class="desktop-nav">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('main.report') }}">Report Missing</a>
+                    <a href="{{ url_for('utils.filter') }}">Filter Reports</a>
+                    <a href="{{ url_for('utils.alert') }}">Alerts</a>
+                    <a href="{{ url_for('utils.feedback') }}">Feedback</a>
+                    <a href="{{ url_for('main.contact') }}">Contact</a>
+                    <a href="{{ url_for('main.chatbot') }}">Chatbot</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                    <a href="{{ url_for('main.contact') }}">Contact</a>
+                    <a href="{{ url_for('main.chatbot') }}">Chatbot</a>
+                {% endif %}
+            </nav>
+            <!-- Mobile Header Icons -->
+            {% if current_user.is_authenticated %}
+            <div class="mobile-header-icons">
+                <button class="mobile-search-icon" aria-label="Search" onclick="toggleMobileSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
+
+            <div class="user-profile">
+                {% if current_user.is_authenticated %}
+                <div class="avatar-container">
+                    {% if current_user.avatar_url %}
+                    <img src="{{ current_user.avatar_url }}" alt="User Avatar" class="user-avatar">
+                    {% else %}
+                    <div class="user-avatar default">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    {% endif %}
+                    <span class="username">{{ current_user.username }}</span>
+                    <div class="profile-dropdown">
+                        <a href="{{ url_for('main.profile') }}" class="dropdown-item">
+                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            My Profile
+                        </a>
+                        <a href="{{ url_for('main.edit_profile') }}" class="dropdown-item">
+                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Edit Profile
+                        </a>
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-item">
+                            <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="login-button">Login</a>
+                {% endif %}
+            </div>
+            <button class="hamburger" aria-label="Toggle menu">☰</button>
+            <nav class="mobile-nav">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('main.report') }}">Report Missing</a>
+                    <a href="{{ url_for('utils.filter') }}">Filter Reports</a>
+                    <a href="{{ url_for('utils.alert') }}">Alerts</a>
+                    <a href="{{ url_for('utils.feedback') }}">Feedback</a>
+                    <a href="{{ url_for('main.contact') }}">Contact</a>
+                    <a href="{{ url_for('main.chatbot') }}">Chatbot</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                    <a href="{{ url_for('main.contact') }}">Contact</a>
+                    <a href="{{ url_for('main.chatbot') }}">Chatbot</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="flash {{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}
+    {% endblock %}
+    {% block footer %}
+    <!-- Simple footer for non-home pages -->
+    <footer class="simple-footer">
+        <div class="simple-footer-container">
+            <div class="footer-brand-simple">
+                <h3>Rescue</h3>
+                <p>Reuniting families worldwide</p>
+            </div>
+            <div class="footer-links-simple">
+                <a href="{{ url_for('main.index') }}">Home</a>
+                <a href="{{ url_for('main.contact') }}">Contact</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}">Login</a>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                {% endif %}
+            </div>
+            <div class="footer-bottom-simple">
+                <p>&copy; 2024 Rescue Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    <script>
+        // Premium Mobile navigation toggle with enhanced animations
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.querySelector('.mobile-nav');
+        const mobileHeader = document.querySelector('.modern-header');
+
+        if (hamburger && mobileNav) {
+            hamburger.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+                hamburger.classList.toggle('active');
+
+                // Add body scroll lock when menu is open
+                if (mobileNav.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Close mobile nav when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+                    mobileNav.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Close mobile nav when clicking on a link
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                    hamburger.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // Premium header scroll effect - Mobile only
+        if (mobileHeader && window.innerWidth <= 768) {
+            let lastScrollY = window.scrollY;
+
+            window.addEventListener('scroll', () => {
+                // Only apply mobile scroll behavior on mobile screens
+                if (window.innerWidth <= 768) {
+                    const currentScrollY = window.scrollY;
+
+                    if (currentScrollY > 50) {
+                        mobileHeader.classList.add('scrolled');
+                    } else {
+                        mobileHeader.classList.remove('scrolled');
+                    }
+
+                    // Hide header on scroll down, show on scroll up (mobile only)
+                    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                        mobileHeader.style.transform = 'translateY(-100%)';
+                    } else {
+                        mobileHeader.style.transform = 'translateY(0)';
+                    }
+
+                    lastScrollY = currentScrollY;
+                } else {
+                    // Reset header position on desktop
+                    mobileHeader.style.transform = 'translateY(0)';
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    mobileHeader.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Add premium touch feedback for mobile links
+        if ('ontouchstart' in window) {
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+
+                link.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        }
+
+        // Mobile search functionality
+        function toggleMobileSearch() {
+            // Create mobile search overlay
+            const existingOverlay = document.querySelector('.mobile-search-overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+                return;
+            }
+
+            const overlay = document.createElement('div');
+            overlay.className = 'mobile-search-overlay';
+            overlay.innerHTML = `
+                <div class="mobile-search-container">
+                    <div class="mobile-search-header">
+                        <input type="text" placeholder="Search missing persons..." class="mobile-search-input" autofocus>
+                        <button class="mobile-search-close" onclick="closeMobileSearch()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="mobile-search-results"></div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+
+            // Add search functionality to mobile input
+            const mobileInput = overlay.querySelector('.mobile-search-input');
+            let mobileSearchTimeout;
+
+            mobileInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                const resultsContainer = overlay.querySelector('.mobile-search-results');
+
+                clearTimeout(mobileSearchTimeout);
+
+                if (query.length > 2) {
+                    mobileSearchTimeout = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`{{ url_for('main.search') }}?q=${encodeURIComponent(query)}&suggestions=true`);
+                            if (response.ok) {
+                                const suggestions = await response.json();
+
+                                if (suggestions.length > 0) {
+                                    resultsContainer.innerHTML = suggestions.map(suggestion => `
+                                        <a href="${suggestion.url}" class="mobile-search-result">
+                                            <div class="result-icon">👤</div>
+                                            <div class="result-text">
+                                                <div class="result-name">${suggestion.text}</div>
+                                                <div class="result-location">Missing Person Report</div>
+                                            </div>
+                                        </a>
+                                    `).join('');
+                                } else {
+                                    resultsContainer.innerHTML = `
+                                        <div class="mobile-search-result">
+                                            <div class="result-icon">🔍</div>
+                                            <div class="result-text">
+                                                <div class="result-name">No results found for "${query}"</div>
+                                                <div class="result-location">Try different keywords</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Mobile search error:', error);
+                            resultsContainer.innerHTML = `
+                                <div class="mobile-search-result">
+                                    <div class="result-icon">❌</div>
+                                    <div class="result-text">
+                                        <div class="result-name">Search failed</div>
+                                        <div class="result-location">Please try again</div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    }, 300);
+                } else {
+                    resultsContainer.innerHTML = '';
+                }
+            });
+
+            // Handle mobile search form submission
+            mobileInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const query = e.target.value.trim();
+                    if (query) {
+                        window.location.href = `{{ url_for('main.search') }}?q=${encodeURIComponent(query)}`;
+                    }
+                }
+            });
+        }
+
+        function closeMobileSearch() {
+            const overlay = document.querySelector('.mobile-search-overlay');
+            if (overlay) {
+                overlay.remove();
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Search functionality - only if search elements exist
+        const searchInput = document.querySelector('.search-input');
+        const searchButton = document.querySelector('.search-button');
+        const clearSearch = document.querySelector('.clear-search');
+        const searchContainer = document.querySelector('.search-container');
+        let searchTimeout;
+        let suggestionsDropdown;
+
+        // Only initialize search if elements exist (user is authenticated)
+        if (searchInput && searchButton && clearSearch && searchContainer) {
+            // Create suggestions dropdown
+            suggestionsDropdown = document.createElement('div');
+            suggestionsDropdown.className = 'search-suggestions';
+            searchContainer.appendChild(suggestionsDropdown);
+
+            // Toggle clear button visibility
+            searchInput.addEventListener('input', () => {
+                clearSearch.style.opacity = searchInput.value ? '1' : '0';
+            });
+
+            // Clear search functionality
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                clearSearch.style.opacity = '0';
+                suggestionsDropdown.style.display = 'none';
+                searchInput.focus();
+            });
+
+            searchButton.addEventListener('click', () => {
+                performSearch(searchInput.value);
+            });
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch(searchInput.value);
+                }
+            });
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                const query = searchInput.value.trim();
+
+                if (query.length > 2) {
+                    searchTimeout = setTimeout(() => {
+                        fetchSuggestions(query);
+                    }, 300);
+                } else {
+                    suggestionsDropdown.style.display = 'none';
+                }
+            });
+
+            // Keyboard navigation for suggestions
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && suggestionsDropdown.style.display === 'block') {
+                    e.preventDefault();
+                    const firstItem = suggestionsDropdown.querySelector('.suggestion-item');
+                    if (firstItem) firstItem.focus();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    suggestionsDropdown.style.display = 'none';
+                }
+            });
+
+            async function fetchSuggestions(query) {
+                try {
+                    const response = await fetch(`{{ url_for('main.search') }}?q=${encodeURIComponent(query)}&suggestions=true`);
+                    if (!response.ok) throw new Error('Search failed');
+                    const suggestions = await response.json();
+
+                    showSuggestions(suggestions);
+                } catch (error) {
+                    console.error('Search error:', error);
+                    showSuggestions([]);
+                }
+            }
+
+            function showSuggestions(suggestions) {
+                suggestionsDropdown.innerHTML = '';
+
+                if (suggestions.length > 0) {
+                    suggestions.forEach(suggestion => {
+                        const item = document.createElement('a');
+                        item.className = 'suggestion-item';
+                        item.href = suggestion.url;
+                        item.innerHTML = `
+                            <div class="suggestion-icon">👤</div>
+                            <div class="suggestion-content">
+                                <div class="suggestion-title">${suggestion.text}</div>
+                                <div class="suggestion-subtitle">Missing Person Report</div>
+                            </div>
+                        `;
+                        suggestionsDropdown.appendChild(item);
+                    });
+                    suggestionsDropdown.style.display = 'block';
+                } else {
+                    suggestionsDropdown.style.display = 'none';
+                }
+            }
+
+            function performSearch(query) {
+                if (query.trim()) {
+                    suggestionsDropdown.style.display = 'none';
+                    const form = document.querySelector('.search-form');
+                    form.querySelector('input[name="q"]').value = query;
+                    form.submit();
+                }
+            }
+
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-container')) {
+                    suggestionsDropdown.style.display = 'none';
+                }
+            });
+        } // End of search functionality conditional block
+    </script>
+    <script>
+        // Enhanced Theme Management
+        const themeToggle = document.getElementById('theme-toggle');
+        const colorPicker = document.getElementById('primary-color');
+        const root = document.documentElement;
+
+        // Only proceed if theme elements exist
+        if (themeToggle && colorPicker) {
+            // Load saved preferences
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedColor = localStorage.getItem('primaryColor') || '#6366f1';
+
+        // Apply theme with smooth transitions
+        function applyTheme(theme) {
+            document.body.classList.toggle('dark-theme', theme === 'dark');
+
+            // Update theme icon
+            const themeIcon = themeToggle.querySelector('.theme-icon');
+            if (themeIcon) {
+                themeIcon.textContent = theme === 'dark' ? '☀️' : '🌓';
+            }
+        }
+
+        // Apply color with RGB calculation
+        function applyColor(color) {
+            root.style.setProperty('--primary-color', color);
+
+            // Calculate RGB values for rgba usage
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+
+            root.style.setProperty('--primary-color-rgb', `${r}, ${g}, ${b}`);
+        }
+
+        // Initialize theme and color
+        applyTheme(savedTheme);
+        applyColor(savedColor);
+        colorPicker.value = savedColor;
+
+        // Theme toggle with smooth transition
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Enhanced color picker
+        colorPicker.addEventListener('input', (e) => {
+            const color = e.target.value;
+            applyColor(color);
+            localStorage.setItem('primaryColor', color);
+        });
+
+        // Header scroll effects
+        const header = document.querySelector('.modern-header');
+        const scrollHandler = () => {
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        };
+        window.addEventListener('scroll', scrollHandler);
+        scrollHandler();
+
+        // Control group animations
+        const controlGroups = document.querySelectorAll('.control-group');
+        controlGroups.forEach(group => {
+            group.addEventListener('mouseenter', () => {
+                group.style.transform = 'translateY(-2px)';
+            });
+            group.addEventListener('mouseleave', () => {
+                group.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Province selector
+        const provinceSelect = document.getElementById('province-select');
+        const savedProvince = localStorage.getItem('province') || 'all';
+        
+        // Set saved province
+        provinceSelect.value = savedProvince;
+        
+        // Handle province change
+        provinceSelect.addEventListener('change', (e) => {
+            const province = e.target.value;
+            localStorage.setItem('province', province);
+            
+            // Show loading state
+            provinceSelect.disabled = true;
+            
+            // In a real implementation, this would filter content by province
+            setTimeout(() => {
+                provinceSelect.disabled = false;
+                alert(`Showing content for ${province === 'all' ? 'all Pakistan' : province}`);
+            }, 500);
+        });
+
+        // Language selector
+        const languageSelect = document.getElementById('language-select');
+        const savedLanguage = localStorage.getItem('language') || 'en';
+        
+        // Set saved language
+        languageSelect.value = savedLanguage;
+        
+        // Handle language change
+        languageSelect.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            localStorage.setItem('language', lang);
+            
+            // Show loading state
+            languageSelect.disabled = true;
+            
+            // Translate page content
+            translatePage(lang).then(() => {
+                languageSelect.disabled = false;
+            });
+        });
+
+        // Translation function (placeholder - replace with real API calls)
+        async function translatePage(targetLang) {
+            // Get all translatable elements
+            const elements = document.querySelectorAll('[data-translate]');
+            
+            // In a real implementation, you would:
+            // 1. Send text to translation API
+            // 2. Update elements with translated text
+            // Here we just simulate it with a timeout
+            
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    elements.forEach(el => {
+                        const key = el.getAttribute('data-translate');
+                        // Simulate translation - in real app this would come from API
+                        el.textContent = `[${targetLang.toUpperCase()}] ${key}`;
+                    });
+                    resolve();
+                }, 500);
+            });
+        }
+        } // End of theme management conditional block
+    </script>
+    {% block scripts_extra %}{% endblock %}
+</body>
+</html>

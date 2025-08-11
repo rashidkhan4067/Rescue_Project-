@@ -1,0 +1,1621 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - Rescue{% endblock %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<section class="edit-profile-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                <span>Profile Settings</span>
+            </div>
+            <h1 class="hero-title">Edit Your Profile</h1>
+            <p class="hero-subtitle">Update your account information, preferences, and security settings</p>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Edit Profile Form -->
+<section class="edit-profile-section">
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" class="premium-edit-form" data-aos="fade-up" data-aos-delay="200">
+            {{ form.hidden_tag() }}
+
+            <!-- Profile Information Section -->
+            <div class="premium-form-section" data-aos="fade-up" data-aos-delay="300">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="section-title-group">
+                        <h2 class="section-title">Profile Information</h2>
+                        <p class="section-subtitle">Update your basic account details and avatar</p>
+                    </div>
+                </div>
+
+                <div class="premium-form-grid">
+                    <!-- Premium Avatar Upload -->
+                    <div class="premium-avatar-section" data-aos="fade-up" data-aos-delay="400">
+                        <div class="avatar-upload-container">
+                            <div class="avatar-preview-wrapper">
+                                {% if current_user.avatar_url %}
+                                <img src="{{ current_user.avatar_url }}" alt="Current Avatar" id="avatar-preview" class="premium-avatar-preview">
+                                {% else %}
+                                <div class="premium-default-avatar" id="avatar-preview">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </div>
+                                {% endif %}
+                                <div class="avatar-overlay">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="avatar-upload-controls">
+                                <label for="avatar" class="premium-upload-btn">
+                                    <input type="file" id="avatar" name="avatar" accept="image/*" onchange="previewAvatar(this)">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    <span>Upload Photo</span>
+                                </label>
+                                <button type="button" class="premium-remove-btn" id="remove-avatar" onclick="removeAvatar()">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                    <span>Remove</span>
+                                </button>
+                            </div>
+                            {% if form.avatar.errors %}
+                            <div class="premium-error-message">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                {{ form.avatar.errors[0] }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Account Details -->
+                    <div class="premium-form-fields">
+                        <div class="premium-field-group" data-aos="fade-up" data-aos-delay="500">
+                            <label for="username" class="premium-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Username
+                            </label>
+                            <div class="premium-input-wrapper">
+                                {{ form.username(class="premium-input", id="username", placeholder="Enter your username") }}
+                                <div class="input-focus-border"></div>
+                            </div>
+                            {% if form.username.errors %}
+                            <div class="premium-error-message">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                {{ form.username.errors[0] }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="premium-field-group" data-aos="fade-up" data-aos-delay="600">
+                            <label for="email" class="premium-label">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22 6 12 13 2 6"/>
+                                </svg>
+                                Email Address
+                            </label>
+                            <div class="premium-input-wrapper">
+                                {{ form.email(class="premium-input", id="email", placeholder="Enter your email address") }}
+                                <div class="input-focus-border"></div>
+                            </div>
+                            {% if form.email.errors %}
+                            <div class="premium-error-message">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                {{ form.email.errors[0] }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Connections Section -->
+            <div class="premium-form-section" data-aos="fade-up" data-aos-delay="400">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </div>
+                    <div class="section-title-group">
+                        <h2 class="section-title">Social Connections</h2>
+                        <p class="section-subtitle">Connect your social media profiles for better networking</p>
+                    </div>
+                </div>
+
+                <div class="premium-form-grid">
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="500">
+                        <label for="twitter" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                            </svg>
+                            Twitter
+                        </label>
+                        <div class="premium-input-wrapper">
+                            <div class="input-prefix">@</div>
+                            {{ form.twitter(class="premium-input with-prefix", id="twitter", placeholder="username") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                    </div>
+
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="600">
+                        <label for="facebook" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                            Facebook
+                        </label>
+                        <div class="premium-input-wrapper">
+                            {{ form.facebook(class="premium-input", id="facebook", placeholder="facebook.com/profile") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                    </div>
+
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="700">
+                        <label for="linkedin" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect x="2" y="9" width="4" height="12"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                            LinkedIn
+                        </label>
+                        <div class="premium-input-wrapper">
+                            <div class="input-prefix">in/</div>
+                            {{ form.linkedin(class="premium-input with-prefix", id="linkedin", placeholder="username") }}
+                            <div class="input-focus-border"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Settings Section -->
+            <div class="premium-form-section" data-aos="fade-up" data-aos-delay="500">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <div class="section-title-group">
+                        <h2 class="section-title">Password Settings</h2>
+                        <p class="section-subtitle">Update your password for enhanced security</p>
+                    </div>
+                </div>
+
+                <div class="premium-form-grid">
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="600">
+                        <label for="current_password" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Current Password
+                        </label>
+                        <div class="premium-input-wrapper">
+                            {{ form.current_password(class="premium-input", id="current_password", placeholder="Enter current password") }}
+                            <div class="input-focus-border"></div>
+                            <button type="button" class="password-toggle" onclick="togglePassword('current_password')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <small class="premium-hint">Leave blank to keep your current password</small>
+                    </div>
+
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="700">
+                        <label for="new_password" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            New Password
+                        </label>
+                        <div class="premium-input-wrapper">
+                            {{ form.new_password(class="premium-input", id="new_password", placeholder="Enter new password", oninput="checkPasswordStrength(this.value)") }}
+                            <div class="input-focus-border"></div>
+                            <button type="button" class="password-toggle" onclick="togglePassword('new_password')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="premium-password-strength" id="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill"></div>
+                            </div>
+                            <div class="strength-text">Password strength: <span id="strength-level">None</span></div>
+                        </div>
+                        {% if form.new_password.errors %}
+                        <div class="premium-error-message">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            {{ form.new_password.errors[0] }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="premium-field-group" data-aos="fade-up" data-aos-delay="800">
+                        <label for="confirm_password" class="premium-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            Confirm Password
+                        </label>
+                        <div class="premium-input-wrapper">
+                            {{ form.confirm_password(class="premium-input", id="confirm_password", placeholder="Confirm new password", oninput="checkPasswordMatch()") }}
+                            <div class="input-focus-border"></div>
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="password-match-indicator" id="password-match"></div>
+                        {% if form.confirm_password.errors %}
+                        <div class="premium-error-message">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            {{ form.confirm_password.errors[0] }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Preferences Section -->
+            <div class="premium-form-section" data-aos="fade-up" data-aos-delay="600">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                    </div>
+                    <div class="section-title-group">
+                        <h2 class="section-title">Notification Preferences</h2>
+                        <p class="section-subtitle">Choose how you want to receive updates and alerts</p>
+                    </div>
+                </div>
+
+                <div class="premium-toggle-group">
+                    <div class="premium-toggle-item" data-aos="fade-up" data-aos-delay="700">
+                        <div class="toggle-content">
+                            <div class="toggle-info">
+                                <div class="toggle-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22 6 12 13 2 6"/>
+                                    </svg>
+                                </div>
+                                <div class="toggle-text">
+                                    <h4>Email Notifications</h4>
+                                    <p>Receive updates about missing person reports and matches via email</p>
+                                </div>
+                            </div>
+                            <label class="premium-toggle">
+                                {{ form.email_notifications(id="email_notifications") }}
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="premium-toggle-item" data-aos="fade-up" data-aos-delay="800">
+                        <div class="toggle-content">
+                            <div class="toggle-info">
+                                <div class="toggle-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                                    </svg>
+                                </div>
+                                <div class="toggle-text">
+                                    <h4>Push Notifications</h4>
+                                    <p>Get instant browser notifications for urgent alerts and updates</p>
+                                </div>
+                            </div>
+                            <label class="premium-toggle">
+                                {{ form.push_notifications(id="push_notifications") }}
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Premium Form Actions -->
+            <div class="premium-form-actions" data-aos="fade-up" data-aos-delay="900">
+                <button type="button" class="premium-btn secondary" onclick="window.history.back()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Cancel
+                </button>
+                <button type="submit" class="premium-btn primary" id="save-btn">
+                    <span class="btn-text">Save Changes</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    <div class="btn-loading" style="display: none;">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+/* Edit Profile Hero Section */
+.edit-profile-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-theme .edit-profile-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.edit-profile-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="150" cy="150" r="80" fill="url(%23a)"/><circle cx="850" cy="300" r="120" fill="url(%23a)"/><circle cx="300" cy="800" r="100" fill="url(%23a)"/></svg>');
+}
+
+.edit-profile-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.edit-profile-hero .hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.3), transparent),
+                      radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
+                      radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent);
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    animation: particleFloat 20s linear infinite;
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-100px); }
+}
+
+.floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.floating-element {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.floating-element:nth-child(3) {
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.edit-profile-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.edit-profile-hero .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.edit-profile-hero .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.edit-profile-hero .hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Edit Profile Section */
+.edit-profile-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .edit-profile-section {
+    background: var(--bg-secondary);
+}
+
+/* Premium Edit Form */
+.premium-edit-form {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.premium-form-section {
+    background: var(--bg-primary);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.premium-form-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark-theme .premium-form-section {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.section-title-group {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Premium Form Grid */
+.premium-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Premium Form Fields */
+.premium-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.premium-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.premium-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.premium-input-wrapper {
+    position: relative;
+}
+
+.premium-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.premium-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.premium-input.with-prefix {
+    padding-left: 3rem;
+}
+
+.input-prefix {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-weight: 600;
+    z-index: 2;
+}
+
+.input-focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.premium-input:focus + .input-focus-border {
+    transform: scaleX(1);
+}
+
+.premium-hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.premium-error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--danger-color);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: var(--danger-light);
+    border-radius: 8px;
+    border-left: 3px solid var(--danger-color);
+}
+
+.dark-theme .premium-input {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark-theme .premium-input:focus {
+    background: var(--bg-primary);
+    border-color: var(--primary-color);
+}
+
+/* Premium Avatar Section */
+.premium-avatar-section {
+    grid-column: 1 / -1;
+    text-align: center;
+}
+
+.avatar-upload-container {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 2px dashed var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.avatar-upload-container:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.avatar-preview-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.premium-avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.premium-avatar-preview:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px var(--primary-color-alpha);
+}
+
+.premium-default-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--primary-color);
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.premium-default-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px var(--primary-color-alpha);
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.avatar-preview-wrapper:hover .avatar-overlay {
+    opacity: 1;
+}
+
+.avatar-upload-controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.premium-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-upload-btn input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.premium-upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--primary-color-alpha);
+}
+
+.premium-remove-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: var(--danger-color);
+    border: 2px solid var(--danger-color);
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.premium-remove-btn:hover {
+    background: var(--danger-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--danger-color-alpha);
+}
+
+/* Premium Password Strength */
+.premium-password-strength {
+    margin-top: 0.75rem;
+}
+
+.strength-bar {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.4s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+.password-match-indicator {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: none;
+}
+
+.password-match-indicator.match {
+    display: block;
+    color: var(--success-color);
+    background: var(--success-light);
+    border-left: 3px solid var(--success-color);
+}
+
+.password-match-indicator.no-match {
+    display: block;
+    color: var(--danger-color);
+    background: var(--danger-light);
+    border-left: 3px solid var(--danger-color);
+}
+
+/* Premium Toggle Group */
+.premium-toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.premium-toggle-item {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.premium-toggle-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.toggle-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.toggle-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.toggle-text h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.toggle-text p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.premium-toggle {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+}
+
+.premium-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--border-color);
+    transition: all 0.3s ease;
+    border-radius: 28px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.premium-toggle input:checked + .toggle-slider {
+    background: var(--primary-color);
+}
+
+.premium-toggle input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.dark-theme .premium-toggle-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* Premium Button Styles */
+.premium-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.premium-btn:hover::before {
+    left: 100%;
+}
+
+.premium-btn.primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: 2px solid transparent;
+}
+
+.premium-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--primary-color-alpha);
+}
+
+.premium-btn.secondary {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+}
+
+.premium-btn.secondary:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.premium-btn.large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Premium Form Actions */
+.premium-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .edit-profile-hero {
+        min-height: 50vh;
+    }
+
+    .edit-profile-hero .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .edit-profile-hero .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .premium-edit-form {
+        margin: 0 1rem;
+    }
+
+    .premium-form-section {
+        padding: 1.5rem;
+    }
+
+    .section-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .premium-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .premium-form-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .premium-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .avatar-upload-controls {
+        flex-direction: column;
+    }
+
+    .toggle-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .premium-toggle {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .edit-profile-hero .hero-title {
+        font-size: 2rem;
+    }
+
+    .premium-form-section {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class PremiumEditProfileSystem {
+    constructor() {
+        this.initializeFormValidation();
+        this.initializePasswordStrength();
+        this.initializeAvatarUpload();
+        this.initializeThemeSupport();
+        this.initializeAnimations();
+    }
+
+    initializeFormValidation() {
+        const form = document.querySelector('.premium-edit-form');
+        const inputs = form.querySelectorAll('.premium-input');
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => this.validateField(input));
+            input.addEventListener('blur', () => this.validateField(input));
+        });
+
+        form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+    }
+
+    validateField(input) {
+        const wrapper = input.closest('.premium-input-wrapper');
+        const errorElement = wrapper.parentNode.querySelector('.premium-error-message');
+
+        // Remove existing validation classes
+        input.classList.remove('valid', 'invalid');
+
+        if (input.value.trim() === '') {
+            return;
+        }
+
+        let isValid = true;
+        let errorMessage = '';
+
+        // Email validation
+        if (input.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            isValid = emailRegex.test(input.value);
+            errorMessage = 'Please enter a valid email address';
+        }
+
+        // Username validation
+        if (input.name === 'username') {
+            isValid = input.value.length >= 3;
+            errorMessage = 'Username must be at least 3 characters long';
+        }
+
+        // Password validation
+        if (input.type === 'password' && input.name === 'new_password') {
+            isValid = input.value.length >= 8;
+            errorMessage = 'Password must be at least 8 characters long';
+        }
+
+        if (isValid) {
+            input.classList.add('valid');
+            input.style.borderColor = 'var(--success-color)';
+        } else {
+            input.classList.add('invalid');
+            input.style.borderColor = 'var(--danger-color)';
+        }
+    }
+
+    initializePasswordStrength() {
+        const passwordInput = document.getElementById('new_password');
+        const confirmInput = document.getElementById('confirm_password');
+
+        if (passwordInput) {
+            passwordInput.addEventListener('input', (e) => {
+                this.checkPasswordStrength(e.target.value);
+            });
+        }
+
+        if (confirmInput) {
+            confirmInput.addEventListener('input', () => {
+                this.checkPasswordMatch();
+            });
+        }
+    }
+
+    checkPasswordStrength(password) {
+        const strengthElement = document.getElementById('password-strength');
+        const strengthFill = strengthElement?.querySelector('.strength-fill');
+        const strengthText = document.getElementById('strength-level');
+
+        if (!strengthElement || !password) {
+            if (strengthFill) strengthFill.style.width = '0%';
+            if (strengthText) strengthText.textContent = 'None';
+            return;
+        }
+
+        let strength = 0;
+        let level = 'Weak';
+        let color = '#dc2626';
+
+        // Length check
+        if (password.length >= 8) strength += 25;
+        if (password.length >= 12) strength += 25;
+
+        // Character variety checks
+        if (/[a-z]/.test(password)) strength += 12.5;
+        if (/[A-Z]/.test(password)) strength += 12.5;
+        if (/[0-9]/.test(password)) strength += 12.5;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 12.5;
+
+        if (strength >= 75) {
+            level = 'Strong';
+            color = '#10b981';
+        } else if (strength >= 50) {
+            level = 'Medium';
+            color = '#f59e0b';
+        }
+
+        if (strengthFill) {
+            strengthFill.style.width = `${strength}%`;
+            strengthFill.style.background = color;
+        }
+
+        if (strengthText) {
+            strengthText.textContent = level;
+            strengthText.style.color = color;
+        }
+    }
+
+    checkPasswordMatch() {
+        const newPassword = document.getElementById('new_password')?.value;
+        const confirmPassword = document.getElementById('confirm_password')?.value;
+        const matchIndicator = document.getElementById('password-match');
+
+        if (!matchIndicator || !confirmPassword) return;
+
+        if (newPassword === confirmPassword) {
+            matchIndicator.className = 'password-match-indicator match';
+            matchIndicator.innerHTML = '✓ Passwords match';
+        } else {
+            matchIndicator.className = 'password-match-indicator no-match';
+            matchIndicator.innerHTML = '✗ Passwords do not match';
+        }
+    }
+
+    initializeAvatarUpload() {
+        const avatarInput = document.getElementById('avatar');
+        const removeBtn = document.getElementById('remove-avatar');
+
+        if (avatarInput) {
+            avatarInput.addEventListener('change', (e) => this.previewAvatar(e));
+        }
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => this.removeAvatar());
+        }
+    }
+
+    previewAvatar(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            this.showNotification('Please select a valid image file', 'error');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            this.showNotification('Image size must be less than 5MB', 'error');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const preview = document.getElementById('avatar-preview');
+            if (preview) {
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    // Replace default avatar with image
+                    const img = document.createElement('img');
+                    img.id = 'avatar-preview';
+                    img.className = 'premium-avatar-preview';
+                    img.src = e.target.result;
+                    img.alt = 'Avatar Preview';
+                    preview.parentNode.replaceChild(img, preview);
+                }
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    removeAvatar() {
+        const preview = document.getElementById('avatar-preview');
+        const avatarInput = document.getElementById('avatar');
+
+        if (preview && preview.tagName === 'IMG') {
+            // Replace image with default avatar
+            const defaultAvatar = document.createElement('div');
+            defaultAvatar.id = 'avatar-preview';
+            defaultAvatar.className = 'premium-default-avatar';
+            defaultAvatar.innerHTML = `
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            `;
+            preview.parentNode.replaceChild(defaultAvatar, preview);
+        }
+
+        if (avatarInput) {
+            avatarInput.value = '';
+        }
+
+        this.showNotification('Avatar removed', 'info');
+    }
+
+    initializeThemeSupport() {
+        this.updateTheme();
+
+        // Listen for theme changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    this.updateTheme();
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+
+    updateTheme() {
+        const isDark = document.body.classList.contains('dark-theme');
+        const editHero = document.querySelector('.edit-profile-hero');
+        const formSections = document.querySelectorAll('.premium-form-section');
+        const toggleItems = document.querySelectorAll('.premium-toggle-item');
+
+        if (isDark) {
+            editHero?.classList.add('dark-theme');
+            formSections.forEach(section => section.classList.add('dark-theme'));
+            toggleItems.forEach(item => item.classList.add('dark-theme'));
+        } else {
+            editHero?.classList.remove('dark-theme');
+            formSections.forEach(section => section.classList.remove('dark-theme'));
+            toggleItems.forEach(item => item.classList.remove('dark-theme'));
+        }
+    }
+
+    initializeAnimations() {
+        // Initialize AOS animations if available
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-out-cubic',
+                once: true,
+                offset: 100
+            });
+        }
+
+        // Add button ripple effects
+        this.addButtonRipples();
+    }
+
+    addButtonRipples() {
+        const buttons = document.querySelectorAll('.premium-btn');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const ripple = document.createElement('span');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+
+                button.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    handleFormSubmit(e) {
+        const submitBtn = document.getElementById('save-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
+
+        // Show loading state
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'flex';
+        submitBtn.disabled = true;
+
+        // Note: In a real application, you would handle the actual form submission here
+        // For now, we'll just simulate the loading state
+        setTimeout(() => {
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+            submitBtn.disabled = false;
+        }, 2000);
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `edit-profile-notification edit-profile-${type}`;
+        notification.textContent = message;
+
+        const colors = {
+            success: '#10b981',
+            error: '#dc2626',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: ${colors[type] || colors.info};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            font-weight: 500;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Global functions
+function previewAvatar(input) {
+    window.editProfileSystem?.previewAvatar({ target: input });
+}
+
+function removeAvatar() {
+    window.editProfileSystem?.removeAvatar();
+}
+
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const button = input.parentNode.querySelector('.password-toggle');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        button.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+        `;
+    } else {
+        input.type = 'password';
+        button.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        `;
+    }
+}
+
+function checkPasswordStrength(password) {
+    window.editProfileSystem?.checkPasswordStrength(password);
+}
+
+function checkPasswordMatch() {
+    window.editProfileSystem?.checkPasswordMatch();
+}
+
+function updateTheme() {
+    window.editProfileSystem?.updateTheme();
+}
+
+// Initialize the edit profile system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.editProfileSystem = new PremiumEditProfileSystem();
+});
+</script>
+
+{% endblock %}

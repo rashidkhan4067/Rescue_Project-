@@ -1,0 +1,1551 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Advanced Missing Person Finder{% endblock %}
+{% block head_extra %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+
+<!-- Premium Dashboard Hero Section -->
+<section class="premium-dashboard-hero" id="dashboard-hero">
+    <!-- Premium Background Elements -->
+    <div class="dashboard-floating-elements">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <!-- Dashboard Hero Content -->
+    <div class="dashboard-hero-content">
+        <!-- Premium Welcome Badge -->
+        <div class="dashboard-badge" data-aos="fade-down" data-aos-duration="800">
+            <span class="badge-icon">👋</span>
+            <span>Welcome back, {{ current_user.username }}!</span>
+        </div>
+
+        <h1 data-aos="fade-up" data-aos-duration="1200">
+            <span class="dashboard-title-line">Your Mission Control</span>
+            <span class="dashboard-title-line dashboard-title-accent">Dashboard</span>
+        </h1>
+
+        <p data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+            {% if current_user.is_admin %}
+                <span class="status-badge admin">🛡️ Admin Access</span> Monitor and manage all reports across the global platform
+            {% else %}
+                <span class="status-badge user">👤 Personal View</span> Track your submitted reports and search activities
+            {% endif %}
+        </p>
+
+        <!-- Premium Quick Actions -->
+        <div class="dashboard-quick-actions" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+            <a href="{{ url_for('main.report') }}" class="quick-action-btn primary">
+                <div class="action-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="11" x2="12" y2="17"></line>
+                        <line x1="9" y1="14" x2="15" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="action-content">
+                    <span class="action-title">Report Missing</span>
+                    <span class="action-subtitle">Submit new case</span>
+                </div>
+            </a>
+            <a href="{{ url_for('utils.alert') }}" class="quick-action-btn secondary">
+                <div class="action-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 2v20M14 2v20M4 7h16M4 17h16"></path>
+                    </svg>
+                </div>
+                <div class="action-content">
+                    <span class="action-title">View Alerts</span>
+                    <span class="action-subtitle">Recent updates</span>
+                </div>
+            </a>
+            <a href="{{ url_for('main.chatbot') }}" class="quick-action-btn tertiary">
+                <div class="action-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="action-content">
+                    <span class="action-title">AI Assistant</span>
+                    <span class="action-subtitle">Get help</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Analytics Dashboard Section -->
+<section class="premium-analytics-section" id="analytics">
+    <div class="analytics-container">
+        <div class="analytics-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">📊</span>
+                <span class="badge-text">Analytics Overview</span>
+            </div>
+            <h2 class="analytics-title">
+                Real-time Platform
+                <span class="gradient-text">Insights</span>
+            </h2>
+        </div>
+
+        <div class="analytics-grid" data-aos="fade-up" data-aos-delay="200">
+            <!-- Total Reports Card -->
+            <div class="analytics-card premium-card" data-aos="zoom-in" data-aos-delay="100">
+                <div class="card-header">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="card-trend positive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            <span>+12%</span>
+                        </div>
+                    </div>
+                    <div class="card-menu">
+                        <button class="menu-btn">⋯</button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-number" data-count="{{ reports|length }}">0</h3>
+                    <p class="card-label">Total Reports</p>
+                    <span class="card-sublabel">{% if current_user.is_admin %}All platform reports{% else %}Your submitted reports{% endif %}</span>
+                </div>
+                <div class="card-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <span class="progress-text">75% of monthly goal</span>
+                </div>
+            </div>
+
+            <!-- Active Cases Card -->
+            <div class="analytics-card premium-card" data-aos="zoom-in" data-aos-delay="200">
+                <div class="card-header">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon active">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <div class="card-trend positive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            <span>+8%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-number" data-count="{{ reports|length }}">0</h3>
+                    <p class="card-label">Active Cases</p>
+                    <span class="card-sublabel">Currently being investigated</span>
+                </div>
+                <div class="card-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill active" style="width: 60%;"></div>
+                    </div>
+                    <span class="progress-text">High priority cases</span>
+                </div>
+            </div>
+
+            <!-- Success Rate Card -->
+            <div class="analytics-card premium-card" data-aos="zoom-in" data-aos-delay="300">
+                <div class="card-header">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon success">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                        </div>
+                        <div class="card-trend positive">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                            <span>+15%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-number" data-count="98.7">0</h3>
+                    <p class="card-label">Success Rate</p>
+                    <span class="card-sublabel">Cases successfully resolved</span>
+                </div>
+                <div class="card-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill success" style="width: 98.7%;"></div>
+                    </div>
+                    <span class="progress-text">Industry leading</span>
+                </div>
+            </div>
+
+            <!-- Response Time Card -->
+            <div class="analytics-card premium-card" data-aos="zoom-in" data-aos-delay="400">
+                <div class="card-header">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon warning">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="card-trend negative">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                                <polyline points="17 18 23 18 23 12"></polyline>
+                            </svg>
+                            <span>-5%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-number" data-count="24">0</h3>
+                    <p class="card-label">Avg Response Time</p>
+                    <span class="card-sublabel">Hours to first response</span>
+                </div>
+                <div class="card-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill warning" style="width: 45%;"></div>
+                    </div>
+                    <span class="progress-text">Faster than average</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Search and Filter Section -->
+<section class="premium-search-section" id="search-section">
+    <div class="search-container">
+        <div class="search-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">🔍</span>
+                <span class="badge-text">Advanced Search</span>
+            </div>
+            <h2 class="search-title">
+                Find Reports with
+                <span class="gradient-text">AI-Powered Search</span>
+            </h2>
+        </div>
+
+        <div class="search-interface" data-aos="fade-up" data-aos-delay="200">
+            <!-- Main Search Bar -->
+            <div class="search-bar-wrapper">
+                <div class="search-bar premium-search">
+                    <div class="search-icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <input type="text" id="search" class="search-input" placeholder="Search by name, area, description, or any detail..." aria-label="Search reports">
+                    <button class="search-clear" id="clearSearch" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="search-submit" id="searchSubmit">
+                        <span>Search</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="7" y1="17" x2="17" y2="7"></line>
+                            <polyline points="7 7 17 7 17 17"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Search Suggestions -->
+                <div class="search-suggestions" id="searchSuggestions" style="display: none;">
+                    <div class="suggestion-item">
+                        <div class="suggestion-icon">👤</div>
+                        <div class="suggestion-content">
+                            <span class="suggestion-title">Search by Name</span>
+                            <span class="suggestion-subtitle">Find specific person</span>
+                        </div>
+                    </div>
+                    <div class="suggestion-item">
+                        <div class="suggestion-icon">📍</div>
+                        <div class="suggestion-content">
+                            <span class="suggestion-title">Search by Location</span>
+                            <span class="suggestion-subtitle">Filter by area</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div class="filter-panel" data-aos="fade-up" data-aos-delay="300">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                        </svg>
+                        Status
+                    </label>
+                    <select class="filter-select premium-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active">🔍 Active</option>
+                        <option value="resolved">✅ Resolved</option>
+                        <option value="pending">⏳ Pending</option>
+                        <option value="urgent">🚨 Urgent</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Location
+                    </label>
+                    <select class="filter-select premium-select" id="areaFilter">
+                        <option value="">All Areas</option>
+                        {% set areas = [] %}
+                        {% for report in reports %}
+                            {% if report.area not in areas %}
+                                {% set _ = areas.append(report.area) %}
+                                <option value="{{ report.area }}">📍 {{ report.area }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Date Range
+                    </label>
+                    <select class="filter-select premium-select" id="dateFilter">
+                        <option value="">All Time</option>
+                        <option value="today">📅 Today</option>
+                        <option value="week">📅 This Week</option>
+                        <option value="month">📅 This Month</option>
+                        <option value="year">📅 This Year</option>
+                    </select>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="filter-btn clear" id="clearFilters">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Clear All
+                    </button>
+                    <button class="filter-btn apply" id="applyFilters">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 11 12 14 22 4"></polyline>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Reports Grid Section -->
+<section class="premium-reports-section" id="reports-section">
+    <div class="reports-container">
+        <div class="reports-header" data-aos="fade-up">
+            <div class="section-badge">
+                <span class="badge-icon">📋</span>
+                <span class="badge-text">Active Reports</span>
+            </div>
+            <h2 class="reports-title">
+                Missing Person
+                <span class="gradient-text">Reports Dashboard</span>
+            </h2>
+            <div class="reports-controls">
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        Grid
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                        List
+                    </button>
+                </div>
+                <div class="sort-controls">
+                    <select class="sort-select premium-select" id="sortBy">
+                        <option value="newest">📅 Newest First</option>
+                        <option value="oldest">📅 Oldest First</option>
+                        <option value="name">🔤 Name A-Z</option>
+                        <option value="area">📍 Location</option>
+                        <option value="status">🔍 Status</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="reports-grid premium-grid" id="reportsGrid" data-aos="fade-up" data-aos-delay="300">
+            {% for report in reports %}
+                <div class="report-card premium-report-card" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 50 }}" data-report-id="{{ report.id }}">
+                    <!-- Card Header with Status -->
+                    <div class="card-header">
+                        <div class="status-badge-wrapper">
+                            <span class="status-badge {{ 'active' if not report.status else report.status }}">
+                                {% if not report.status or report.status == 'active' %}
+                                    🔍 Active
+                                {% elif report.status == 'resolved' %}
+                                    ✅ Resolved
+                                {% elif report.status == 'pending' %}
+                                    ⏳ Pending
+                                {% else %}
+                                    🚨 Urgent
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="card-menu">
+                            <button class="menu-btn" onclick="toggleCardMenu({{ report.id }})">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="1"></circle>
+                                    <circle cx="19" cy="12" r="1"></circle>
+                                    <circle cx="5" cy="12" r="1"></circle>
+                                </svg>
+                            </button>
+                            <div class="card-dropdown" id="menu-{{ report.id }}" style="display: none;">
+                                <a href="#" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    View Details
+                                </a>
+                                {% if current_user.is_admin %}
+                                <a href="#" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit Report
+                                </a>
+                                <a href="#" class="dropdown-item danger">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Delete Report
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Image -->
+                    {% if report.image %}
+                        <div class="report-image-container">
+                            <img src="{{ url_for('static', filename='uploads/' + report.image) }}" alt="Image of {{ report.name }}" class="report-image" loading="lazy">
+                            <div class="image-overlay">
+                                <button class="image-action-btn" onclick="viewImage('{{ url_for('static', filename='uploads/' + report.image) }}', '{{ report.name }}')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </button>
+                                <button class="image-action-btn" onclick="downloadImage('{{ url_for('static', filename='uploads/' + report.image) }}', '{{ report.name }}')">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="image-quality-indicator">
+                                <span class="quality-badge high">HD</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="report-image-placeholder">
+                            <div class="placeholder-content">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <span>No Image Available</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Report Content -->
+                    <div class="report-content">
+                        <div class="report-header">
+                            <h3 class="report-name">{{ report.name }}</h3>
+                            <div class="report-meta">
+                                <span class="report-id">#{{ report.id }}</span>
+                                <span class="report-date">{{ report.created_at.strftime('%b %d, %Y') if report.created_at else 'Recent' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="report-details">
+                            <div class="detail-row">
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </div>
+                                    <div class="detail-content">
+                                        <span class="detail-label">Age</span>
+                                        <span class="detail-value">{{ report.age }} years</span>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="detail-content">
+                                        <span class="detail-label">Gender</span>
+                                        <span class="detail-value">{{ report.gender }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-item location">
+                                    <div class="detail-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                            <circle cx="12" cy="10" r="3"></circle>
+                                        </svg>
+                                    </div>
+                                    <div class="detail-content">
+                                        <span class="detail-label">Last Seen</span>
+                                        <span class="detail-value">{{ report.area }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-row description">
+                                <div class="detail-item">
+                                    <div class="detail-icon">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="detail-content">
+                                        <span class="detail-label">Description</span>
+                                        <span class="detail-value">{{ report.description[:120] }}{% if report.description|length > 120 %}...{% endif %}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Report Actions -->
+                        <div class="report-actions">
+                            <button class="action-btn primary" onclick="viewReportDetails({{ report.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                                <span>View Details</span>
+                            </button>
+                            <button class="action-btn secondary" onclick="shareReport({{ report.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                <span>Share</span>
+                            </button>
+                            {% if current_user.is_admin %}
+                            <button class="action-btn admin" onclick="editReport({{ report.id }})">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>Edit</span>
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        <!-- Report Footer -->
+                        <div class="report-footer">
+                            <div class="footer-info">
+                                <span class="submitted-by">Submitted by {{ report.user.username if report.user else 'Unknown' }}</span>
+                                <span class="report-priority">
+                                    {% if not report.status or report.status == 'active' %}
+                                        🔥 High Priority
+                                    {% elif report.status == 'urgent' %}
+                                        🚨 Critical
+                                    {% else %}
+                                        ⭐ Standard
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Empty State -->
+        {% if not reports %}
+        <div class="empty-state premium-empty" data-aos="fade-up">
+            <div class="empty-illustration">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <div class="empty-content">
+                <h3>No Reports Found</h3>
+                <p>{% if current_user.is_admin %}No reports have been submitted to the platform yet.{% else %}You haven't submitted any missing person reports yet.{% endif %}</p>
+                <div class="empty-actions">
+                    <a href="{{ url_for('main.report') }}" class="btn-primary-modern">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="11" x2="12" y2="17"></line>
+                            <line x1="9" y1="14" x2="15" y2="14"></line>
+                        </svg>
+                        <span>Submit Your First Report</span>
+                    </a>
+                    <a href="{{ url_for('main.simple_report') }}" class="btn-secondary-modern">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>Simple Report Form</span>
+                    </a>
+                    <a href="{{ url_for('utils.alert') }}" class="btn-secondary-modern">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 2v20M14 2v20M4 7h16M4 17h16"></path>
+                        </svg>
+                        <span>View Recent Alerts</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Image Modal -->
+<div class="image-modal" id="imageModal" style="display: none;">
+    <div class="modal-backdrop" onclick="closeImageModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalImageTitle">Image Preview</h3>
+            <button class="modal-close" onclick="closeImageModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <img id="modalImage" src="" alt="" class="modal-image">
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn secondary" onclick="downloadModalImage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download
+            </button>
+            <button class="modal-btn primary" onclick="closeImageModal()">Close</button>
+        </div>
+    </div>
+</div>
+</section>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS with premium settings
+    AOS.init({
+        duration: 1000,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100,
+        delay: 100
+    });
+
+    // Premium Dashboard State Management
+    class DashboardManager {
+        constructor() {
+            this.searchInput = document.getElementById("search");
+            this.clearButton = document.getElementById("clearSearch");
+            this.statusFilter = document.getElementById("statusFilter");
+            this.areaFilter = document.getElementById("areaFilter");
+            this.dateFilter = document.getElementById("dateFilter");
+            this.reportsGrid = document.getElementById("reportsGrid");
+            this.searchTimeout = null;
+            this.currentView = 'grid';
+            this.currentSort = 'newest';
+
+            this.initializeEventListeners();
+            this.initializeAnimations();
+
+            // Don't automatically perform search - preserve server-rendered reports
+            console.log('Dashboard initialized, preserving server-rendered reports');
+        }
+
+        initializeEventListeners() {
+            // Search functionality
+            this.searchInput?.addEventListener("input", (e) => this.handleSearch(e));
+            this.clearButton?.addEventListener("click", () => this.clearSearch());
+
+            // Filter functionality
+            this.statusFilter?.addEventListener("change", () => this.performSearch());
+            this.areaFilter?.addEventListener("change", () => this.performSearch());
+            this.dateFilter?.addEventListener("change", () => this.performSearch());
+
+            // View toggle
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => this.toggleView(e.target.dataset.view));
+            });
+
+            // Sort functionality
+            document.getElementById('sortBy')?.addEventListener('change', (e) => this.handleSort(e.target.value));
+
+            // Filter actions
+            document.getElementById('clearFilters')?.addEventListener('click', () => this.clearAllFilters());
+            document.getElementById('applyFilters')?.addEventListener('click', () => this.performSearch());
+        }
+
+        handleSearch(e) {
+            const value = e.target.value;
+            this.clearButton.style.display = value ? "flex" : "none";
+
+            // Show search suggestions
+            if (value.length > 2) {
+                this.showSearchSuggestions(value);
+            } else {
+                this.hideSearchSuggestions();
+            }
+
+            // Debounced search
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                this.performSearch();
+            }, 300);
+        }
+
+        showSearchSuggestions(query) {
+            const suggestions = document.getElementById('searchSuggestions');
+            if (suggestions) {
+                suggestions.style.display = 'block';
+                // Add animation
+                suggestions.style.opacity = '0';
+                suggestions.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    suggestions.style.opacity = '1';
+                    suggestions.style.transform = 'translateY(0)';
+                }, 10);
+            }
+        }
+
+        hideSearchSuggestions() {
+            const suggestions = document.getElementById('searchSuggestions');
+            if (suggestions) {
+                suggestions.style.opacity = '0';
+                suggestions.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    suggestions.style.display = 'none';
+                }, 200);
+            }
+        }
+
+        clearSearch() {
+            this.searchInput.value = "";
+            this.clearButton.style.display = "none";
+            this.hideSearchSuggestions();
+
+            // Check if other filters are applied
+            const hasOtherFilters = this.statusFilter?.value || this.areaFilter?.value || this.dateFilter?.value;
+            if (!hasOtherFilters) {
+                // No other filters, reload to show server-rendered reports
+                console.log('Clearing search with no other filters, reloading page');
+                window.location.reload();
+            } else {
+                // Other filters are applied, perform search
+                this.performSearch();
+            }
+        }
+
+        clearAllFilters() {
+            this.searchInput.value = "";
+            this.statusFilter.value = "";
+            this.areaFilter.value = "";
+            this.dateFilter.value = "";
+            this.clearButton.style.display = "none";
+            this.hideSearchSuggestions();
+
+            // Reload the page to show original server-rendered reports
+            console.log('Clearing all filters, reloading page to show server-rendered reports');
+            window.location.reload();
+        }
+
+        toggleView(view) {
+            this.currentView = view;
+
+            // Update button states
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+
+            // Update grid class
+            if (this.reportsGrid) {
+                this.reportsGrid.className = view === 'grid' ? 'reports-grid premium-grid' : 'reports-grid premium-list';
+            }
+        }
+
+        handleSort(sortBy) {
+            this.currentSort = sortBy;
+            this.performSearch();
+        }
+
+        async performSearch() {
+            const searchTerm = this.searchInput?.value || "";
+            const status = this.statusFilter?.value || "";
+            const area = this.areaFilter?.value || "";
+            const date = this.dateFilter?.value || "";
+
+            // If no filters are applied, don't perform AJAX search - keep server-rendered reports
+            if (!searchTerm && !status && !area && !date) {
+                console.log('No filters applied, keeping server-rendered reports');
+                return;
+            }
+
+            try {
+                // Add premium loading state
+                this.showLoadingState();
+
+                const response = await fetch("/utils/filter_reports", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `search=${encodeURIComponent(searchTerm)}&status=${encodeURIComponent(status)}&area=${encodeURIComponent(area)}&date=${encodeURIComponent(date)}&sort=${encodeURIComponent(this.currentSort)}`
+                });
+
+                if (!response.ok) throw new Error('Search failed');
+
+                const reports = await response.json();
+                this.updateReportsDisplay(reports);
+                this.hideLoadingState();
+
+            } catch (error) {
+                console.error("Search failed:", error);
+                this.showErrorState();
+            }
+        }
+
+        showLoadingState() {
+            if (this.reportsGrid) {
+                this.reportsGrid.style.opacity = "0.6";
+                this.reportsGrid.style.pointerEvents = "none";
+
+                // Add loading spinner
+                const loadingSpinner = document.createElement('div');
+                loadingSpinner.className = 'loading-spinner';
+                loadingSpinner.innerHTML = `
+                    <div class="spinner-content">
+                        <div class="spinner"></div>
+                        <span>Searching reports...</span>
+                    </div>
+                `;
+                this.reportsGrid.appendChild(loadingSpinner);
+            }
+        }
+
+        hideLoadingState() {
+            if (this.reportsGrid) {
+                this.reportsGrid.style.opacity = "1";
+                this.reportsGrid.style.pointerEvents = "auto";
+
+                // Remove loading spinner
+                const spinner = this.reportsGrid.querySelector('.loading-spinner');
+                if (spinner) spinner.remove();
+            }
+        }
+
+        showErrorState() {
+            if (this.reportsGrid) {
+                this.reportsGrid.innerHTML = `
+                    <div class="error-state premium-error" style="grid-column: 1 / -1;">
+                        <div class="error-illustration">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </div>
+                        <div class="error-content">
+                            <h3>Search Failed</h3>
+                            <p>Unable to load reports. Please check your connection and try again.</p>
+                            <button class="btn-primary-modern" onclick="dashboardManager.performSearch()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                                </svg>
+                                <span>Retry Search</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                this.hideLoadingState();
+            }
+        }
+
+        updateReportsDisplay(reports) {
+            if (!this.reportsGrid) return;
+
+            if (reports.length === 0) {
+                this.reportsGrid.innerHTML = `
+                    <div class="no-results-state" style="grid-column: 1 / -1;">
+                        <div class="no-results-illustration">
+                            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <div class="no-results-content">
+                            <h3>No Reports Found</h3>
+                            <p>Try adjusting your search criteria or filters.</p>
+                            <button class="btn-secondary-modern" onclick="dashboardManager.clearAllFilters()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                <span>Clear Filters</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Generate premium report cards
+            this.reportsGrid.innerHTML = reports.map((report, index) => this.generateReportCard(report, index)).join("");
+
+            // Re-initialize AOS for new elements
+            AOS.refresh();
+        }
+
+        generateReportCard(report, index) {
+            return `
+                <div class="report-card premium-report-card" data-aos="zoom-in" data-aos-delay="${index * 50}" data-report-id="${report.id}">
+                    <div class="card-header">
+                        <div class="status-badge-wrapper">
+                            <span class="status-badge ${report.status || 'active'}">
+                                ${this.getStatusIcon(report.status)} ${this.getStatusText(report.status)}
+                            </span>
+                        </div>
+                        <div class="card-menu">
+                            <button class="menu-btn" onclick="toggleCardMenu(${report.id})">⋯</button>
+                        </div>
+                    </div>
+                    ${this.generateImageSection(report)}
+                    ${this.generateContentSection(report)}
+                </div>
+            `;
+        }
+
+        getStatusIcon(status) {
+            switch(status) {
+                case 'resolved': return '✅';
+                case 'pending': return '⏳';
+                case 'urgent': return '🚨';
+                default: return '🔍';
+            }
+        }
+
+        getStatusText(status) {
+            switch(status) {
+                case 'resolved': return 'Resolved';
+                case 'pending': return 'Pending';
+                case 'urgent': return 'Urgent';
+                default: return 'Active';
+            }
+        }
+
+        generateImageSection(report) {
+            if (report.image) {
+                return `
+                    <div class="report-image-container">
+                        <img src="/static/uploads/${report.image}" alt="Image of ${report.name}" class="report-image" loading="lazy">
+                        <div class="image-overlay">
+                            <button class="image-action-btn" onclick="viewImage('/static/uploads/${report.image}', '${report.name}')">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="image-quality-indicator">
+                            <span class="quality-badge high">HD</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="report-image-placeholder">
+                        <div class="placeholder-content">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            <span>No Image Available</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        generateContentSection(report) {
+            return `
+                <div class="report-content">
+                    <div class="report-header">
+                        <h3 class="report-name">${report.name}</h3>
+                        <div class="report-meta">
+                            <span class="report-id">#${report.id}</span>
+                        </div>
+                    </div>
+                    <div class="report-details">
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <div class="detail-content">
+                                    <span class="detail-label">Age</span>
+                                    <span class="detail-value">${report.age} years</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-content">
+                                    <span class="detail-label">Gender</span>
+                                    <span class="detail-value">${report.gender}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-item location">
+                                <div class="detail-content">
+                                    <span class="detail-label">Last Seen</span>
+                                    <span class="detail-value">${report.area}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail-row description">
+                            <div class="detail-item">
+                                <div class="detail-content">
+                                    <span class="detail-label">Description</span>
+                                    <span class="detail-value">${report.description.length > 120 ? report.description.substring(0, 120) + '...' : report.description}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="action-btn primary" onclick="viewReportDetails(${report.id})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <span>View Details</span>
+                        </button>
+                        <button class="action-btn secondary" onclick="shareReport(${report.id})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                            <span>Share</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        initializeAnimations() {
+            // Animate statistics counters
+            this.animateCounters();
+
+            // Add premium hover effects
+            this.addHoverEffects();
+
+            // Initialize particle effects
+            this.initializeParticles();
+        }
+
+        animateCounters() {
+            const counters = document.querySelectorAll('.card-number[data-count]');
+            counters.forEach(counter => {
+                const target = parseFloat(counter.dataset.count);
+                let current = 0;
+                const increment = target / 60;
+                const isDecimal = target % 1 !== 0;
+
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = isDecimal ? current.toFixed(1) : Math.floor(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = isDecimal ? target.toFixed(1) : target;
+                    }
+                };
+
+                // Start animation after a delay
+                setTimeout(updateCounter, 500);
+            });
+        }
+
+        addHoverEffects() {
+            // Add ripple effect to interactive elements
+            document.addEventListener('click', (e) => {
+                if (e.target.matches('.action-btn, .quick-action-btn, .analytics-card')) {
+                    this.createRippleEffect(e);
+                }
+            });
+        }
+
+        createRippleEffect(e) {
+            const button = e.currentTarget;
+            const ripple = document.createElement('span');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease-out;
+                pointer-events: none;
+                z-index: 1;
+            `;
+
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        }
+
+        initializeParticles() {
+            // Add floating particles to hero section
+            const hero = document.querySelector('.premium-dashboard-hero');
+            if (hero) {
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'floating-particle';
+                    particle.style.cssText = `
+                        position: absolute;
+                        width: ${Math.random() * 4 + 2}px;
+                        height: ${Math.random() * 4 + 2}px;
+                        background: rgba(var(--primary-color-rgb), ${Math.random() * 0.5 + 0.2});
+                        border-radius: 50%;
+                        left: ${Math.random() * 100}%;
+                        top: ${Math.random() * 100}%;
+                        animation: float ${Math.random() * 10 + 10}s infinite linear;
+                        pointer-events: none;
+                    `;
+                    hero.appendChild(particle);
+                }
+            }
+        }
+    }
+
+    // Initialize Dashboard Manager
+    let dashboardManager;
+
+    // Global utility functions
+    function toggleCardMenu(reportId) {
+        const menu = document.getElementById(`menu-${reportId}`);
+        if (menu) {
+            const isVisible = menu.style.display === 'block';
+
+            // Hide all other menus
+            document.querySelectorAll('.card-dropdown').forEach(dropdown => {
+                dropdown.style.display = 'none';
+            });
+
+            // Toggle current menu
+            menu.style.display = isVisible ? 'none' : 'block';
+
+            // Add click outside listener
+            if (!isVisible) {
+                setTimeout(() => {
+                    document.addEventListener('click', function hideMenu(e) {
+                        if (!menu.contains(e.target) && !e.target.closest('.menu-btn')) {
+                            menu.style.display = 'none';
+                            document.removeEventListener('click', hideMenu);
+                        }
+                    });
+                }, 10);
+            }
+        }
+    }
+
+    function viewImage(imageSrc, personName) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalImageTitle');
+
+        if (modal && modalImage && modalTitle) {
+            modalImage.src = imageSrc;
+            modalImage.alt = `Image of ${personName}`;
+            modalTitle.textContent = `${personName} - Image Preview`;
+            modal.style.display = 'flex';
+
+            // Add animation
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        if (modal) {
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    function downloadImage(imageSrc, personName) {
+        const link = document.createElement('a');
+        link.href = imageSrc;
+        link.download = `${personName.replace(/\s+/g, '_')}_photo.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function downloadModalImage() {
+        const modalImage = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalImageTitle');
+        if (modalImage && modalTitle) {
+            const personName = modalTitle.textContent.split(' - ')[0];
+            downloadImage(modalImage.src, personName);
+        }
+    }
+
+    function viewReportDetails(reportId) {
+        // Navigate to the detailed report page
+        window.location.href = `{{ url_for('main.report_details', report_id=0) }}`.replace('0', reportId);
+    }
+
+    function shareReport(reportId) {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Missing Person Report',
+                text: `Help us find this missing person. Report #${reportId}`,
+                url: window.location.href
+            }).catch(console.error);
+        } else {
+            // Fallback: copy to clipboard
+            const url = `${window.location.origin}/report/${reportId}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showNotification('Report link copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Unable to copy link', 'error');
+            });
+        }
+    }
+
+    function editReport(reportId) {
+        window.location.href = `/report/edit/${reportId}`;
+    }
+
+    function showReportDetailsModal(reportId) {
+        // Implementation for detailed report modal
+        console.log(`Showing details for report ${reportId}`);
+        // This would typically fetch detailed report data and show in a modal
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <span class="notification-icon">
+                    ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+                </span>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        dashboardManager = new DashboardManager();
+
+        // Add premium CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+
+            @keyframes float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); }
+                33% { transform: translateY(-10px) rotate(120deg); }
+                66% { transform: translateY(5px) rotate(240deg); }
+            }
+
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+
+            @keyframes slideInUp {
+                from {
+                    transform: translateY(30px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .loading-spinner {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 10;
+            }
+
+            .spinner {
+                width: 40px;
+                height: 40px;
+                border: 4px solid rgba(var(--primary-color-rgb), 0.3);
+                border-top: 4px solid var(--primary-color);
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--card-bg);
+                border-radius: var(--border-radius);
+                box-shadow: var(--box-shadow-lg);
+                z-index: 1000;
+                animation: slideInUp 0.3s ease-out;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .notification-success {
+                border-left-color: var(--success-color);
+            }
+
+            .notification-error {
+                border-left-color: var(--error-color);
+            }
+
+            .notification-content {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .notification-close {
+                background: none;
+                border: none;
+                font-size: 1.25rem;
+                cursor: pointer;
+                color: var(--text-light);
+                margin-left: auto;
+            }
+
+            .image-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                transition: opacity 0.3s ease;
+            }
+
+            .modal-backdrop {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .modal-content {
+                background: var(--card-bg);
+                border-radius: var(--border-radius-lg);
+                max-width: 90vw;
+                max-height: 90vh;
+                position: relative;
+                overflow: hidden;
+                box-shadow: var(--box-shadow-xl);
+            }
+
+            .modal-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.5rem;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .modal-close {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text-light);
+                padding: 0.5rem;
+                border-radius: 50%;
+                transition: var(--transition);
+            }
+
+            .modal-close:hover {
+                background: rgba(var(--primary-color-rgb), 0.1);
+                color: var(--primary-color);
+            }
+
+            .modal-body {
+                padding: 0;
+            }
+
+            .modal-image {
+                width: 100%;
+                height: auto;
+                max-height: 60vh;
+                object-fit: contain;
+            }
+
+            .modal-footer {
+                display: flex;
+                gap: 1rem;
+                padding: 1.5rem;
+                border-top: 1px solid var(--border-color);
+                justify-content: flex-end;
+            }
+
+            .modal-btn {
+                padding: 0.75rem 1.5rem;
+                border-radius: var(--border-radius);
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                transition: var(--transition);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .modal-btn.primary {
+                background: var(--primary-color);
+                color: white;
+            }
+
+            .modal-btn.secondary {
+                background: transparent;
+                color: var(--text-color);
+                border: 1px solid var(--border-color);
+            }
+
+            .modal-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: var(--box-shadow-md);
+            }
+        `;
+        document.head.appendChild(style);
+    });
+
+    // Handle keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Escape key closes modals
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+
+        // Ctrl/Cmd + K focuses search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            const searchInput = document.getElementById('search');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        }
+    });
+</script>
+{% endblock %}

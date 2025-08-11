@@ -1,0 +1,1163 @@
+{% extends "base.html" %}
+{% block title %}AI Assistant - Rescue{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section chatbot-hero">
+    <div class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-particles"></div>
+        <div class="ai-animation">
+            <div class="ai-circle"></div>
+            <div class="ai-circle delay-1"></div>
+            <div class="ai-circle delay-2"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <div class="hero-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>AI-Powered Assistant</span>
+            </div>
+            <h1 class="hero-title">Rescue AI Assistant</h1>
+            <p class="hero-subtitle">Get instant help with missing person reports, search assistance, and emergency guidance through our intelligent AI chatbot</p>
+        </div>
+    </div>
+</section>
+
+<!-- Chatbot Interface Section -->
+<section class="chatbot-interface-section">
+    <div class="container">
+        <div class="chatbot-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="chatbot-header">
+                <div class="chatbot-status">
+                    <div class="status-indicator online"></div>
+                    <div class="status-info">
+                        <h3>Rescue AI Assistant</h3>
+                        <p class="status-text">Online - Ready to help</p>
+                    </div>
+                </div>
+                <div class="chatbot-actions">
+                    <button class="action-btn" onclick="clearChat()" title="Clear Chat">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18l-2 13H5L3 6z"></path>
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                    <button class="action-btn" onclick="toggleChatbot()" title="Minimize">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="message bot-message" data-aos="fade-up">
+                    <div class="message-avatar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <p>Hello! I'm the Rescue AI Assistant. I'm here to help you with:</p>
+                            <ul>
+                                <li>🔍 Finding missing persons</li>
+                                <li>📝 Filing missing person reports</li>
+                                <li>🚨 Emergency assistance</li>
+                                <li>💡 Platform guidance</li>
+                                <li>📞 Contact information</li>
+                            </ul>
+                            <p>How can I assist you today?</p>
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions" id="quickActions">
+                <h4>Quick Actions</h4>
+                <div class="action-buttons">
+                    <button class="quick-action-btn" onclick="sendQuickMessage('I need to report a missing person')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Report Missing Person
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('I want to search for someone')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        Search for Someone
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('I have information about a missing person')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Report Sighting
+                    </button>
+                    <button class="quick-action-btn" onclick="sendQuickMessage('I need emergency help')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Emergency Help
+                    </button>
+                </div>
+            </div>
+
+            <div class="chatbot-input-area">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message here..." maxlength="500">
+                        <div class="input-actions">
+                            <button class="attachment-btn" onclick="showAttachmentOptions()" title="Attach file">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
+                                </svg>
+                            </button>
+                            <button class="emoji-btn" onclick="showEmojiPicker()" title="Add emoji">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <small class="typing-indicator" id="typingIndicator" style="display: none;">
+                        <span class="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                        AI Assistant is typing...
+                    </small>
+                    <small class="char-count" id="charCount">0/500</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Features Section -->
+        <div class="ai-features-section" data-aos="fade-up" data-aos-delay="400">
+            <div class="features-header">
+                <h2>AI Assistant Capabilities</h2>
+                <p>Our intelligent assistant is trained to help with all aspects of missing person cases</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                    <h3>Smart Search</h3>
+                    <p>Advanced search algorithms to find relevant missing person reports and matches</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock assistance for urgent cases and emergency situations</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4l3 3V8l-3 3z"></path>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                    </div>
+                    <h3>Multi-Language</h3>
+                    <p>Communicate in multiple languages for better accessibility and support</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>Personalized Help</h3>
+                    <p>Tailored assistance based on your specific situation and needs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Premium Styling -->
+<style>
+/* Chatbot Hero Section */
+.chatbot-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-theme .chatbot-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.chatbot-hero .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="150" cy="150" r="80" fill="url(%23a)"/><circle cx="850" cy="300" r="120" fill="url(%23a)"/><circle cx="300" cy="800" r="100" fill="url(%23a)"/></svg>');
+}
+
+.chatbot-hero .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.ai-animation {
+    position: absolute;
+    top: 25%;
+    right: 15%;
+    width: 150px;
+    height: 150px;
+}
+
+.ai-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: aiPulse 3s infinite;
+}
+
+.ai-circle.delay-1 {
+    animation-delay: 1s;
+    width: 60px;
+    height: 60px;
+}
+
+.ai-circle.delay-2 {
+    animation-delay: 2s;
+    width: 80px;
+    height: 80px;
+}
+
+@keyframes aiPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+.chatbot-hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+
+.chatbot-hero .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.chatbot-hero .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.chatbot-hero .hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Chatbot Interface Section */
+.chatbot-interface-section {
+    padding: 4rem 0;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .chatbot-interface-section {
+    background: var(--bg-secondary);
+}
+
+.chatbot-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: 20px;
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.dark-theme .chatbot-container {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+}
+
+.chatbot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.chatbot-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #10b981;
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-info h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.status-text {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.chatbot-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Chat Messages */
+.chatbot-messages {
+    height: 400px;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+}
+
+.dark-theme .chatbot-messages {
+    background: var(--bg-secondary);
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+}
+
+.message.user-message {
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.user-message .message-avatar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.message-content {
+    flex: 1;
+    max-width: 70%;
+}
+
+.user-message .message-content {
+    text-align: right;
+}
+
+.message-bubble {
+    background: var(--bg-primary);
+    padding: 1rem 1.5rem;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.user-message .message-bubble {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.dark-theme .message-bubble {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.message-bubble p {
+    margin: 0 0 0.5rem 0;
+    line-height: 1.5;
+}
+
+.message-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+.message-bubble ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.message-bubble li {
+    margin-bottom: 0.25rem;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+}
+
+.user-message .message-time {
+    text-align: right;
+}
+
+/* Quick Actions */
+.quick-actions {
+    padding: 1.5rem 2rem;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.quick-actions h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 1rem 0;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #374151;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-action-btn:hover {
+    background: #f0f4ff;
+    border-color: #3b82f6;
+    color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+/* Chat Input */
+.chatbot-input-area {
+    padding: 1.5rem 2rem;
+    background: white;
+    border-top: 1px solid #e2e8f0;
+}
+
+.input-container {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+}
+
+.input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 1rem 4rem 1rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 25px;
+    font-size: 1rem;
+    resize: none;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-actions {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 0.25rem;
+}
+
+.attachment-btn,
+.emoji-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    color: #64748b;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.attachment-btn:hover,
+.emoji-btn:hover {
+    background: #f1f5f9;
+    color: #3b82f6;
+}
+
+.send-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.send-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #94a3b8;
+}
+
+.input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.75rem;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64748b;
+    animation: typingDots 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingDots {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+.char-count {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* AI Features Section */
+.ai-features-section {
+    margin-top: 3rem;
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.features-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.features-header p {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    color: white;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chatbot-hero .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .chatbot-hero .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .chatbot-container {
+        margin: 0 1rem;
+    }
+
+    .chatbot-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .chatbot-messages {
+        height: 300px;
+        padding: 1rem;
+    }
+
+    .quick-actions {
+        padding: 1rem 1.5rem;
+    }
+
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .chatbot-input-area {
+        padding: 1rem 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- Advanced JavaScript Functionality -->
+<script>
+class PremiumChatbotSystem {
+    constructor() {
+        this.chatInput = document.getElementById('chatInput');
+        this.sendBtn = document.getElementById('sendBtn');
+        this.chatMessages = document.getElementById('chatMessages');
+        this.typingIndicator = document.getElementById('typingIndicator');
+        this.charCount = document.getElementById('charCount');
+        this.quickActions = document.getElementById('quickActions');
+
+        this.messageHistory = [];
+        this.isTyping = false;
+
+        this.initializeEventListeners();
+        this.updateCharCount();
+        this.initializeQuickActions();
+    }
+
+    initializeEventListeners() {
+        // Chat input events
+        if (this.chatInput) {
+            this.chatInput.addEventListener('input', () => {
+                this.updateCharCount();
+                this.updateSendButton();
+            });
+
+            this.chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+        }
+
+        // Send button
+        if (this.sendBtn) {
+            this.sendBtn.addEventListener('click', () => {
+                this.sendMessage();
+            });
+        }
+    }
+
+    initializeQuickActions() {
+        // Hide quick actions after first message
+        if (this.messageHistory.length > 0) {
+            this.quickActions.style.display = 'none';
+        }
+    }
+
+    updateCharCount() {
+        if (!this.chatInput || !this.charCount) return;
+
+        const currentLength = this.chatInput.value.length;
+        const maxLength = 500;
+
+        this.charCount.textContent = `${currentLength}/${maxLength}`;
+
+        if (currentLength > maxLength * 0.9) {
+            this.charCount.style.color = '#dc2626';
+        } else if (currentLength > maxLength * 0.7) {
+            this.charCount.style.color = '#f59e0b';
+        } else {
+            this.charCount.style.color = '#64748b';
+        }
+    }
+
+    updateSendButton() {
+        if (!this.chatInput || !this.sendBtn) return;
+
+        const hasText = this.chatInput.value.trim().length > 0;
+        this.sendBtn.disabled = !hasText || this.isTyping;
+    }
+
+    sendMessage() {
+        if (!this.chatInput || this.isTyping) return;
+
+        const message = this.chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message
+        this.addMessage(message, 'user');
+
+        // Clear input
+        this.chatInput.value = '';
+        this.updateCharCount();
+        this.updateSendButton();
+
+        // Hide quick actions after first message
+        if (this.quickActions) {
+            this.quickActions.style.display = 'none';
+        }
+
+        // Show typing indicator and generate response
+        this.showTypingIndicator();
+        setTimeout(() => {
+            this.generateBotResponse(message);
+        }, 1000 + Math.random() * 2000);
+    }
+
+    sendQuickMessage(message) {
+        if (this.chatInput) {
+            this.chatInput.value = message;
+            this.updateCharCount();
+            this.updateSendButton();
+            this.sendMessage();
+        }
+    }
+
+    addMessage(content, sender = 'bot') {
+        if (!this.chatMessages) return;
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${sender}-message`;
+
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        messageEl.innerHTML = `
+            <div class="message-avatar">
+                ${sender === 'user' ?
+                    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>' :
+                    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>'
+                }
+            </div>
+            <div class="message-content">
+                <div class="message-bubble">
+                    <p>${content}</p>
+                </div>
+                <div class="message-time">${timeStr}</div>
+            </div>
+        `;
+
+        this.chatMessages.appendChild(messageEl);
+        this.scrollToBottom();
+
+        // Add to history
+        this.messageHistory.push({ content, sender, timestamp: now });
+    }
+
+    showTypingIndicator() {
+        this.isTyping = true;
+        this.updateSendButton();
+
+        if (this.typingIndicator) {
+            this.typingIndicator.style.display = 'flex';
+        }
+    }
+
+    hideTypingIndicator() {
+        this.isTyping = false;
+        this.updateSendButton();
+
+        if (this.typingIndicator) {
+            this.typingIndicator.style.display = 'none';
+        }
+    }
+
+    generateBotResponse(userMessage) {
+        const responses = this.getBotResponse(userMessage);
+
+        this.hideTypingIndicator();
+
+        // Add bot response
+        setTimeout(() => {
+            this.addMessage(responses.main, 'bot');
+
+            // Add follow-up if exists
+            if (responses.followUp) {
+                setTimeout(() => {
+                    this.addMessage(responses.followUp, 'bot');
+                }, 1500);
+            }
+        }, 500);
+    }
+
+    getBotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+
+        if (lowerMessage.includes('missing person') || lowerMessage.includes('report')) {
+            return {
+                main: "I can help you report a missing person. To file a report, I'll need some basic information. Would you like me to guide you through the process step by step?",
+                followUp: "You can also visit our Report page directly by clicking <a href='/report' style='color: #3b82f6; text-decoration: underline;'>here</a>."
+            };
+        }
+
+        if (lowerMessage.includes('search') || lowerMessage.includes('find')) {
+            return {
+                main: "I can help you search for missing persons in our database. You can search by name, location, age, or physical description. Would you like to start a search now?",
+                followUp: "Visit our <a href='/utils/filter' style='color: #3b82f6; text-decoration: underline;'>Advanced Search</a> page for detailed filtering options."
+            };
+        }
+
+        if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
+            return {
+                main: "🚨 For immediate emergencies, please call 15 right away. If this is about a missing person emergency, I can also connect you with our emergency response team.",
+                followUp: "For non-emergency assistance, I'm here to help guide you through our services."
+            };
+        }
+
+        if (lowerMessage.includes('sighting') || lowerMessage.includes('information')) {
+            return {
+                main: "Thank you for wanting to help! If you have information about a missing person, this is very important. I can help you report this information to the authorities.",
+                followUp: "Please provide as much detail as possible: location, time, description, and any other relevant information."
+            };
+        }
+
+        if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
+            return {
+                main: "I'm here to help! I can assist you with: 📝 Filing missing person reports, 🔍 Searching our database, 🚨 Emergency assistance, 📞 Contact information, and 💡 Platform guidance.",
+                followUp: "What specific area would you like help with?"
+            };
+        }
+
+        // Default response
+        return {
+            main: "I understand you're looking for assistance. I'm here to help with missing person cases, searches, and emergency support. Could you please tell me more about what you need help with?",
+            followUp: "You can also use the quick action buttons above for common requests."
+        };
+    }
+
+    scrollToBottom() {
+        if (this.chatMessages) {
+            this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+        }
+    }
+
+    clearChat() {
+        if (this.chatMessages) {
+            // Keep only the initial bot message
+            const initialMessage = this.chatMessages.querySelector('.message.bot-message');
+            this.chatMessages.innerHTML = '';
+            if (initialMessage) {
+                this.chatMessages.appendChild(initialMessage);
+            }
+        }
+
+        this.messageHistory = [];
+
+        // Show quick actions again
+        if (this.quickActions) {
+            this.quickActions.style.display = 'block';
+        }
+
+        this.showNotification('Chat cleared', 'info');
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `chatbot-notification chatbot-${type}`;
+        notification.textContent = message;
+
+        const colors = {
+            success: '#10b981',
+            error: '#dc2626',
+            info: '#3b82f6',
+            warning: '#f59e0b'
+        };
+
+        notification.style.cssText = `
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: ${colors[type] || colors.info};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            font-weight: 500;
+        `;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Global functions for chatbot actions
+function sendQuickMessage(message) {
+    if (window.chatbotSystem) {
+        window.chatbotSystem.sendQuickMessage(message);
+    }
+}
+
+function clearChat() {
+    if (window.chatbotSystem) {
+        window.chatbotSystem.clearChat();
+    }
+}
+
+function toggleChatbot() {
+    const container = document.querySelector('.chatbot-container');
+    if (container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function showAttachmentOptions() {
+    alert('File attachment feature coming soon! For now, please describe your case in text.');
+}
+
+function showEmojiPicker() {
+    const emojis = ['😊', '👍', '❤️', '😢', '🙏', '🚨', '📞', '🔍'];
+    const emoji = prompt('Choose an emoji:\n' + emojis.join(' '));
+    if (emoji && window.chatbotSystem?.chatInput) {
+        window.chatbotSystem.chatInput.value += emoji;
+        window.chatbotSystem.updateCharCount();
+        window.chatbotSystem.updateSendButton();
+    }
+}
+
+// Theme support functions
+function updateChatbotTheme() {
+    const isDark = document.body.classList.contains('dark-theme');
+    const chatContainer = document.querySelector('.chatbot-container');
+    const messageBubbles = document.querySelectorAll('.message-bubble');
+    const chatMessages = document.querySelector('.chatbot-messages');
+
+    if (isDark) {
+        chatContainer?.classList.add('dark-theme');
+        messageBubbles.forEach(bubble => bubble.classList.add('dark-theme'));
+        chatMessages?.classList.add('dark-theme');
+    } else {
+        chatContainer?.classList.remove('dark-theme');
+        messageBubbles.forEach(bubble => bubble.classList.remove('dark-theme'));
+        chatMessages?.classList.remove('dark-theme');
+    }
+}
+
+// Theme support functions
+function updateTheme() {
+    updateChatbotTheme();
+}
+
+// Initialize the chatbot system when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.chatbotSystem = new PremiumChatbotSystem();
+
+    // Initialize theme support
+    updateChatbotTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                updateChatbotTheme();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+
+    // Initialize AOS animations if available
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+    }
+});
+</script>
+
+{% endblock %}

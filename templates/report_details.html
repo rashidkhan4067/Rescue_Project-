@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% block title %}{{ report.name }} - Report Details{% endblock %}
+{% block head_extra %}
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+
+<!-- Premium Report Details Hero -->
+<section class="report-details-hero">
+    <div class="hero-background">
+        {% if report.image %}
+            <img src="{{ url_for('static', filename='uploads/' + report.image) }}" alt="{{ report.name }}" class="hero-bg-image">
+        {% endif %}
+        <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="report-status-badge">
+            <span class="status-indicator active">🔍 Active Case</span>
+        </div>
+        
+        <h1 class="report-title" data-aos="fade-up">{{ report.name }}</h1>
+        <p class="report-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Missing Person Report #{{ report.id }}
+        </p>
+        
+        <div class="hero-actions" data-aos="fade-up" data-aos-delay="400">
+            <button class="btn-primary-large" onclick="shareReport()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+                Share This Report
+            </button>
+            <button class="btn-secondary-large" onclick="printReport()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Print Report
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Report Details Content -->
+<section class="report-details-content">
+    <div class="content-container">
+        <div class="details-grid">
+            <!-- Main Information Card -->
+            <div class="details-card main-info" data-aos="fade-up">
+                <div class="card-header">
+                    <h2>Personal Information</h2>
+                    <div class="urgency-indicator high">High Priority</div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Full Name</span>
+                            <span class="info-value">{{ report.name }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Age</span>
+                            <span class="info-value">{{ report.age }} years old</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Gender</span>
+                            <span class="info-value">{{ report.gender }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Last Known Location</span>
+                            <span class="info-value">{{ report.area }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Report Date</span>
+                            <span class="info-value">{{ report.created_at.strftime('%B %d, %Y at %I:%M %p') if report.created_at else 'Not specified' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="info-content">
+                            <span class="info-label">Reported By</span>
+                            <span class="info-value">{{ report.user.username if report.user else 'Anonymous' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Photo Card -->
+            {% if report.image %}
+            <div class="details-card photo-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header">
+                    <h2>Photo</h2>
+                    <button class="download-btn" onclick="downloadPhoto()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="photo-container">
+                    <img src="{{ url_for('static', filename='uploads/' + report.image) }}" alt="{{ report.name }}" class="report-photo" onclick="openPhotoModal()">
+                    <div class="photo-overlay">
+                        <button class="photo-zoom-btn" onclick="openPhotoModal()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="11" y1="8" x2="11" y2="14"></line>
+                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Description Card -->
+            <div class="details-card description-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-header">
+                    <h2>Description & Details</h2>
+                </div>
+                
+                <div class="description-content">
+                    <p>{{ report.description }}</p>
+                </div>
+                
+                <div class="description-tags">
+                    <span class="tag">Missing Person</span>
+                    <span class="tag">{{ report.area }}</span>
+                    <span class="tag">{{ report.gender }}</span>
+                    <span class="tag">Age {{ report.age }}</span>
+                </div>
+            </div>
+            
+            <!-- Contact Information Card -->
+            <div class="details-card contact-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-header">
+                    <h2>Have Information?</h2>
+                </div>
+                
+                <div class="contact-content">
+                    <p class="contact-message">If you have any information about {{ report.name }}, please contact the authorities immediately.</p>
+                    
+                    <div class="contact-actions">
+                        <button class="contact-btn emergency">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Call Emergency: 15
+                        </button>
+                        
+                        <button class="contact-btn police">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            Contact Police
+                        </button>
+                    </div>
+                    
+                    <div class="tip-submission">
+                        <h4>Submit Anonymous Tip</h4>
+                        <form class="tip-form" onsubmit="submitTip(event)">
+                            <textarea placeholder="Share any information you have about this case..." rows="4"></textarea>
+                            <button type="submit" class="submit-tip-btn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                                Submit Tip
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Dashboard -->
+        <div class="back-navigation" data-aos="fade-up" data-aos-delay="500">
+            <a href="{{ url_for('main.dashboard') }}" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Photo Modal -->
+<div class="photo-modal" id="photoModal" style="display: none;">
+    <div class="modal-backdrop" onclick="closePhotoModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>{{ report.name }} - Photo</h3>
+            <button class="modal-close" onclick="closePhotoModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            {% if report.image %}
+            <img src="{{ url_for('static', filename='uploads/' + report.image) }}" alt="{{ report.name }}" class="modal-image">
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn secondary" onclick="downloadPhoto()">Download</button>
+            <button class="modal-btn primary" onclick="closePhotoModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 100
+    });
+
+    // Photo modal functionality
+    function openPhotoModal() {
+        const modal = document.getElementById('photoModal');
+        modal.style.display = 'flex';
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.opacity = '1';
+        }, 10);
+    }
+
+    function closePhotoModal() {
+        const modal = document.getElementById('photoModal');
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    // Download photo
+    function downloadPhoto() {
+        const link = document.createElement('a');
+        link.href = "{{ url_for('static', filename='uploads/' + report.image) if report.image else '#' }}";
+        link.download = "{{ report.name.replace(' ', '_') }}_photo.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Share report
+    function shareReport() {
+        if (navigator.share) {
+            navigator.share({
+                title: 'Missing Person: {{ report.name }}',
+                text: 'Help us find {{ report.name }}. Last seen in {{ report.area }}.',
+                url: window.location.href
+            }).catch(console.error);
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Report link copied to clipboard!');
+            }).catch(() => {
+                alert('Unable to copy link');
+            });
+        }
+    }
+
+    // Print report
+    function printReport() {
+        window.print();
+    }
+
+    // Submit tip
+    function submitTip(event) {
+        event.preventDefault();
+        const textarea = event.target.querySelector('textarea');
+        const tip = textarea.value.trim();
+        
+        if (tip) {
+            // Here you would normally send the tip to your backend
+            alert('Thank you for your tip. It has been submitted to the authorities.');
+            textarea.value = '';
+        } else {
+            alert('Please enter some information before submitting.');
+        }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePhotoModal();
+        }
+    });
+</script>
+
+{% endblock %}
