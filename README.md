@@ -42,6 +42,10 @@
 - Secure file uploads
 - Environment-based configuration
 
+## 🎬 Demo
+
+Check out our [demo video](https://vt.tiktok.com/ZSStvM2JG/) to see the website in action!
+
 ## 🚀 Getting Started
 
 ### Prerequisites
