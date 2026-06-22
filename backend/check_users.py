@@ -1,0 +1,10 @@
+from app import create_app, db
+from app.models import User
+
+app = create_app()
+with app.app_context():
+    users = User.query.all()
+    print("--- REGISTERED USERS ---")
+    for u in users:
+        print(f"ID: {u.id} | Username: {u.username} | Email: {u.email} | IsAdmin: {u.is_admin}")
+    print("------------------------")

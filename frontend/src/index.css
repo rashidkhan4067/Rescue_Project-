@@ -1,0 +1,543 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0');
+@import './styles/dashboard.css';
+@import './styles/landing.css';
+
+:root {
+  /* Google Material Colors */
+  --primary-color: #1a73e8;
+  --primary-light: #8ab4f8;
+  --primary-dark: #174ea6;
+  --secondary-color: #34a853;
+  --accent-color: #ea4335;
+  --error-color: #ea4335;
+  --warning-color: #f9ab00;
+
+  /* Google Neutrals */
+  --text-color: #202124;
+  --text-light: #5f6368;
+  --border-color: #dadce0;
+  --bg-color: #ffffff;
+  --card-bg: #ffffff;
+  --light-color: #f8f9fa;
+  --light-dark: #e8eaed;
+
+  /* Shadows */
+  --box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+  --box-shadow-md: 0 4px 6px 0 rgba(60,64,67,.3), 0 4px 6px 1px rgba(60,64,67,.15);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --primary-color: #8ab4f8;
+  --primary-dark: #5a8ef6;
+  --primary-light: #c4dbff;
+  --secondary-color: #81c995;
+  --accent-color: #ff8a80;
+  --error-color: #ff8a80;
+  --warning-color: #ffb74d;
+  --text-color: #e8eaed;
+  --text-light: #b0b3b8;
+  --border-color: #5f6368;
+  --bg-color: #202124;
+  --card-bg: #303134;
+  --light-color: #303134;
+  --light-dark: #3c4043;
+  --box-shadow: 0 1px 2px 0 rgba(0,0,0,.5), 0 1px 3px 1px rgba(0,0,0,.3);
+  --box-shadow-md: 0 4px 6px 0 rgba(0,0,0,.5), 0 4px 6px 1px rgba(0,0,0,.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   LANDING PAGE MODULES
+   ========================================================================== */
+.google-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 70vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  gap: 2rem;
+}
+
+.hero-text-content {
+  flex: 1;
+  max-width: 650px;
+}
+
+.hero-text-content h1 {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-text-content p {
+  font-size: 1.25rem;
+  color: var(--text-light);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 550px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-google-primary, .btn-google-secondary {
+  padding: 0 24px;
+  height: 48px;
+  border-radius: 24px;
+  display: inline-flex;
+  align-items: center;
+  justifyContent: center;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  font-family: 'Google Sans', Roboto, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-google-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-google-primary:hover {
+  background-color: var(--primary-dark);
+  box-shadow: 0 1px 3px rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+}
+
+.btn-google-secondary {
+  background-color: transparent;
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+}
+
+.btn-google-secondary:hover {
+  background-color: rgba(26, 115, 232, 0.04);
+  color: var(--primary-dark);
+}
+
+.hero-image-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-wrapper {
+  background: var(--light-color);
+  border-radius: 32px;
+  padding: 3rem;
+  box-shadow: var(--box-shadow-md);
+}
+
+.hero-image-content img {
+  max-width: 100%;
+  width: 250px;
+}
+
+.google-stats-bar {
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 3rem 0;
+}
+
+.stats-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.google-features-section {
+  padding: 6rem 2rem;
+  background-color: var(--light-color);
+}
+
+.features-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+}
+
+.features-header h2 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.features-header p {
+  font-size: 1.125rem;
+  color: var(--text-light);
+}
+
+.google-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 2.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  box-shadow: var(--box-shadow-md);
+  transform: translateY(-2px);
+}
+
+.feature-card .material-symbols-rounded {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  background: rgba(26, 115, 232, 0.1);
+  padding: 1rem;
+  border-radius: 16px;
+}
+
+.feature-card.green .material-symbols-rounded {
+  color: var(--secondary-color);
+  background: rgba(52, 168, 83, 0.1);
+}
+
+.feature-card.red .material-symbols-rounded {
+  color: var(--accent-color);
+  background: rgba(234, 67, 53, 0.1);
+}
+
+.feature-card.yellow .material-symbols-rounded {
+  color: var(--warning-color);
+  background: rgba(249, 171, 0, 0.1);
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.feature-card p {
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   GLOBAL REUSABLE PORTAL DESIGN SYSTEM (DRY COMPLIANT)
+   ========================================================================== */
+
+/* Keyframe Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.6; }
+  100% { transform: scale(0.9); opacity: 0.3; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Reusable Interactive Utilities */
+.icon-btn-hover:hover {
+  background-color: rgba(95,99,104,0.08) !important;
+}
+
+.nav-item-hover:hover {
+  background-color: rgba(60,64,67,0.04) !important;
+  color: var(--text-color) !important;
+}
+
+/* Outlined Case Card Elevations */
+.portal-case-card {
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s !important;
+}
+
+.portal-case-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(60,64,67,0.08) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.portal-case-card:hover .material-symbols-rounded {
+  transform: translateX(4px) !important;
+  color: var(--primary-color) !important;
+}
+
+/* Main Topbar search box focus effect */
+.topbar-search-focus:focus-within {
+  background-color: var(--card-bg) !important;
+  box-shadow: 0 1px 3px rgba(60,64,67,0.3) !important;
+}
+
+/* Standard Primary Button hovers */
+.portal-btn-primary:hover {
+  background-color: #1557b0 !important;
+}
+
+.portal-btn-logout:hover {
+  background-color: #f8f9fa !important;
+  border-color: var(--accent-color) !important;
+  color: var(--accent-color) !important;
+}
+
+.portal-btn-secondary-outline:hover {
+  background-color: rgba(26,115,232,0.04) !important;
+}
+
+.portal-input-focus:focus {
+  border-color: var(--primary-color) !important;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT CONSOLES
+   ========================================================================== */
+
+/* Left Navigation Sidebar Drawer on Mobile Viewports */
+@media (max-width: 768px) {
+  .dashboard-sidebar-drawer {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+    transform: translateX(-100%) !important; /* Offscreen default */
+    border-right: none !important;
+    
+    /* Stop flex space allocation */
+    width: 0 !important;
+    min-width: 0 !important;
+    flex-basis: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden !important;
+  }
+  
+  .sidebar-drawer-open {
+    transform: translateX(0) !important; /* Slide drawer in */
+    width: 260px !important;
+    min-width: 260px !important;
+    padding: 20px 16px !important;
+  }
+
+  /* Main Workspace stack adjustments */
+  .dashboard-main-container {
+    padding: 20px 16px !important;
+  }
+  
+  .dashboard-header-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  
+  .dashboard-header-actions {
+    width: 100% !important;
+  }
+  
+  .dashboard-header-actions a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  .dashboard-welcome-title {
+    font-size: 22px !important;
+  }
+  
+  .dashboard-health-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 16px !important;
+  }
+  
+  /* Telemetry counter stacks */
+  section[style*="metricsGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  /* Case registry single column */
+  div[style*="cardGrid"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  section[style*="sectionContainer"] {
+    padding: 20px 16px !important;
+  }
+
+  /* Topbar header compression */
+  .topbar-search-container {
+    display: none !important; /* Collapse search */
+  }
+  
+  .topbar-smtp-text {
+    display: none !important; /* Collapse text badge */
+  }
+  
+  .topbar-smtp-status {
+    padding: 4px 6px !important;
+  }
+  
+  .topbar-dropdown {
+    right: -50px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .google-hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+}
+
+/* Google Material 3 Outlined Form Controls */
+.material-input-wrapper {
+  position: relative;
+  width: 100%;
+  text-align: left;
+}
+
+.material-input-container {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: var(--card-bg);
+  transition: border-color 0.15s ease, border-width 0.15s ease, padding 0.15s ease;
+  height: 52px;
+  box-sizing: border-box;
+  padding: 0 12px;
+}
+
+.material-input-container.focused {
+  border-color: var(--primary-color);
+  border-width: 2px;
+  padding: 0 11px;
+}
+
+.material-input-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text-light);
+  background-color: var(--card-bg);
+  padding: 0 6px;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), top 0.15s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s ease;
+  pointer-events: none;
+  transform-origin: top left;
+  z-index: 1;
+}
+
+.material-input-container.focused .material-input-label,
+.material-input-container.filled .material-input-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.8);
+  font-weight: 500;
+}
+
+.material-input-container.focused .material-input-label {
+  color: var(--primary-color);
+}
+
+.material-input,
+.material-select,
+.material-textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text-color);
+  font-family: inherit;
+  background-color: transparent;
+  z-index: 2;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.material-textarea {
+  padding-top: 14px;
+  resize: vertical;
+}
+
+.material-input-container:has(textarea) {
+  height: auto;
+  align-items: flex-start;
+}
+
+.material-input-container:has(textarea) .material-input-label {
+  top: 18px;
+}
+
+.material-input-container.focused:has(textarea) .material-input-label,
+.material-input-container.filled:has(textarea) .material-input-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.8);
+}
+
+.register-case-modal-card {
+  max-width: 580px !important;
+}
+
+.material-file-dropzone:hover {
+  border-color: var(--primary-color) !important;
+  background-color: var(--light-dark) !important;
+}

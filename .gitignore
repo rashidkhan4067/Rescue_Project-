@@ -1,0 +1,37 @@
+# Python environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+*.db
+*.sqlite3
+
+# Node/JS environment
+node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+frontend/node_modules/
+frontend/dist/
+
+# IDE/OS files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.DS_Store
+Thumbs.db
+
+# Project databases / instances / uploads
+instance/
+backend/instance/
+backend/static/uploads/
+backend/.env
