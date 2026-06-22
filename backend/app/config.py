@@ -11,9 +11,15 @@ class Config:
     """Base configuration class."""
     SECRET_KEY = os.environ.get("SECRET_KEY", os.urandom(24).hex())
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    # Construct the database path and normalize slashes
-    DB_PATH = os.path.join(BASE_DIR, "..", "instance", "rescue.db").replace("\\", "/")
-    SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
+    # Dynamic database configuration (Postgres/Supabase support for Vercel, with SQLite fallback)
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    if SQLALCHEMY_DATABASE_URI:
+        # Resolve legacy postgres:// schema compatibility for SQLAlchemy
+        if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
+            SQLALCHEMY_DATABASE_URI = SQLALCHEMY_DATABASE_URI.replace("postgres://", "postgresql://", 1)
+    else:
+        DB_PATH = os.path.join(BASE_DIR, "..", "instance", "rescue.db").replace("\\", "/")
+        SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
